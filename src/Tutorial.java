@@ -19,6 +19,7 @@ public class Tutorial extends BasicGameState {
     private List<Zombie> firstObstacle = new ArrayList<>();
     private List<Zombie> secondObstacle = new ArrayList<>();
     private List<Zombie> thirdObstacle = new ArrayList<>();
+    private List<Zombie> fourthObstacle = new ArrayList<>();
     private Player player1;
     private Shape end;
     private Shape outOfBound;
@@ -80,6 +81,26 @@ public class Tutorial extends BasicGameState {
         Zombie zombie31 = new Zombie(new Point(610, 750), .4f);
         addZombie(thirdObstacle, zombie25, zombie26, zombie27, zombie28, zombie29, zombie30, zombie31);
 
+        //fourth obstacle initialization
+        int x_pos = 860;
+        int y_pos = 750;
+        float speed = .3f;
+        Zombie zombie32 = new Zombie(new Point(x_pos, y_pos), speed);
+        Zombie zombie33 = new Zombie(new Point(x_pos+60, y_pos+30), speed);
+        Zombie zombie34 = new Zombie(new Point(x_pos+120, y_pos+60), speed);
+        Zombie zombie35 = new Zombie(new Point(x_pos+180, y_pos+90), speed);
+        Zombie zombie36 = new Zombie(new Point(x_pos+240, y_pos+120), speed);
+        Zombie zombie37 = new Zombie(new Point(x_pos+300, y_pos+150), speed);
+        Zombie zombie38 = new Zombie(new Point(x_pos+360, y_pos+180), speed);
+        Zombie zombie39 = new Zombie(new Point(x_pos+420, y_pos+210), speed);
+        Zombie zombie40 = new Zombie(new Point(x_pos+480, y_pos+240), speed);
+        Zombie zombie41 = new Zombie(new Point(x_pos+540, y_pos+270), speed);
+        Zombie zombie42 = new Zombie(new Point(x_pos+600, y_pos+300), speed);
+        Zombie zombie43 = new Zombie(new Point(x_pos+660, y_pos+330), speed);
+        addZombie(fourthObstacle, zombie32, zombie33, zombie34, zombie35, zombie36,
+                zombie37, zombie38, zombie39, zombie40, zombie41, zombie42, zombie43);
+
+
 
     }
 
@@ -118,7 +139,11 @@ public class Tutorial extends BasicGameState {
             g.draw(currZombie.getHitBox());
         }
 
-
+        //fourth obstacle
+        for (Zombie currZombie: fourthObstacle){
+            currZombie.getCurrZombieAnimation().draw(currZombie.getX(), currZombie.getY());
+            g.draw(currZombie.getHitBox());
+        }
 
         //Draw end destination
         g.setColor(Color.blue);
@@ -182,7 +207,9 @@ public class Tutorial extends BasicGameState {
         for(Zombie currZombie: firstObstacle){ player1.getDamage(currZombie.getHitBox()); }
         for(Zombie currZombie: secondObstacle){ player1.getDamage(currZombie.getHitBox()); }
         for (Zombie currZombie: thirdObstacle) player1.getDamage(currZombie.getHitBox());
+        for (Zombie currZombie: fourthObstacle) player1.getDamage(currZombie.getHitBox());
 
+        //third obstacle
         Zombie _3zombie1 = thirdObstacle.get(0);
         Point _3zombieLoc1 = _3zombie1.getOriginalPosition();
         Point _3zombieLoc2 = new Point(10, _3zombie1.getOriginalY());
@@ -230,7 +257,11 @@ public class Tutorial extends BasicGameState {
         Point _3zombie7Loc2 = new Point(_3zombie7Loc1.getX(), Application.HEIGHT - 65);
         _3zombie7.moveVerticalUpToDown(_3zombie7Loc1, _3zombie7Loc2, delta);
 
-
+        //fourth obstacle
+        for (Zombie currZombie: fourthObstacle){
+            currZombie.moveVerticalUpToDown(new Point(860, 750),
+                    new Point(860, Application.HEIGHT - 65), delta);
+        }
 
     }
 
