@@ -6,7 +6,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Application extends StateBasedGame {
 
     public static final int WIDTH   = 1920;
-    public static final int HEIGHT  = 1280;
+    public static final int HEIGHT  = 1080;
     public static final int FPS     = 120;
     public static final double VERSION = 1.0;
 
@@ -17,7 +17,7 @@ public class Application extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         this.addState(new MainMenu());
-        //this.addState(new Play());
+        this.addState(new Tutorial());
         //this.addState(new Options());
     }
 

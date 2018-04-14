@@ -1,6 +1,22 @@
+import org.newdawn.slick.geom.Shape;
+
 public abstract class Living {
     private Point location;
     private float speed;
+    private Shape hitBox;
+
+    public Shape getHitBox() {
+        return hitBox;
+    }
+
+    public void setHitBox(Shape hitBox){
+        this.hitBox = hitBox;
+    }
+
+    public void setHitBoxLocation(Point location) {
+        hitBox.setCenterX(location.getX());
+        hitBox.setCenterY(location.getY());
+    }
 
     public Point getLocation() {
         return location;
