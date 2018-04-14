@@ -172,47 +172,32 @@ public class Tutorial extends BasicGameState {
         for (Zombie currZombie: secondObstacle) {currZombie.stand();}
 
         //third obstacle
-        Zombie _3zombie1 = thirdObstacle.get(0);
-        Point _3zombieLoc1 = _3zombie1.getOriginalPosition();
-        Point _3zombieLoc2 = new Point(10, _3zombie1.getOriginalY());
-        Point _3zombieLoc3 = new Point(10, Application.HEIGHT - 65);
-        Point _3zombieLoc4 = new Point(_3zombieLoc1.getX(), Application.HEIGHT - 65);
-        _3zombie1.moveSquaredStartRightLeft(_3zombieLoc1, _3zombieLoc2, _3zombieLoc3, _3zombieLoc4, delta);
+        int x_3 = 10;
+        int y_3 = Application.HEIGHT - 65;
+        for(int i = 0; i < 3; i++){
+            Point originalPosition = new Point(560, 750);
+            Zombie currZombie = thirdObstacle.get(i);
+            Point currZombieLoc1 = currZombie.getOriginalPosition();
+            Point currZombieLoc2 = new Point(x_3, originalPosition.getY());
+            Point currZombieLoc3 = new Point(x_3, y_3);
+            Point currZombieLoc4 = new Point(originalPosition.getX(), y_3);
+            currZombie.moveSquaredStartRightLeft(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4, delta);
+            x_3 += 50;
+            y_3 -= 50;
+        }
 
-        Zombie _3zombie2 = thirdObstacle.get(1);
-        Point _3zombie2Loc1 = _3zombie2.getOriginalPosition();
-        Point _3zombie2Loc2 = new Point(60, _3zombie2.getOriginalY());
-        Point _3zombie2Loc3 = new Point(60, Application.HEIGHT - 115);
-        Point _3zombie2Loc4 = new Point(_3zombie2Loc1.getX(), Application.HEIGHT - 115);
-        _3zombie2.moveSquaredStartRightLeft(_3zombie2Loc1, _3zombie2Loc2, _3zombie2Loc3, _3zombie2Loc4, delta);
-
-        Zombie _3zombie3 = thirdObstacle.get(2);
-        Point _3zombie3Loc1 = _3zombie3.getOriginalPosition();
-        Point _3zombie3Loc2 = new Point(110, _3zombie2.getOriginalY());
-        Point _3zombie3Loc3 = new Point(110, Application.HEIGHT - 165);
-        Point _3zombie3Loc4 = new Point(_3zombie3Loc1.getX(), Application.HEIGHT - 165);
-        _3zombie3.moveSquaredStartRightLeft(_3zombie3Loc1, _3zombie3Loc2, _3zombie3Loc3, _3zombie3Loc4, delta);
-
-        Zombie _3zombie4 = thirdObstacle.get(3);
-        Point _3zombie4Loc1 = new Point(10, _3zombie1.getOriginalY());
-        Point _3zombie4Loc2 = _3zombie1.getOriginalPosition();
-        Point _3zombie4Loc3 = new Point(_3zombie1.getOriginalX(), Application.HEIGHT - 65);
-        Point _3zombie4Loc4 = new Point(10, Application.HEIGHT - 65);
-        _3zombie4.moveSquaredStartLeftRight(_3zombie4Loc1, _3zombie4Loc2, _3zombie4Loc3, _3zombie4Loc4, delta );
-
-        Zombie _3zombie5 = thirdObstacle.get(4);
-        Point _3zombie5Loc1 = new Point(60, _3zombie2.getOriginalY());
-        Point _3zombie5Loc2 = _3zombie2.getOriginalPosition();
-        Point _3zombie5Loc3 = new Point(_3zombie2.getOriginalX(), Application.HEIGHT - 115);
-        Point _3zombie5Loc4 = new Point(60, Application.HEIGHT - 115);
-        _3zombie5.moveSquaredStartLeftRight(_3zombie5Loc1, _3zombie5Loc2, _3zombie5Loc3, _3zombie5Loc4, delta );
-
-        Zombie _3zombie6 = thirdObstacle.get(5);
-        Point _3zombie6Loc1 = new Point(110, _3zombie3.getOriginalY());
-        Point _3zombie6Loc2 = _3zombie3.getOriginalPosition();
-        Point _3zombie6Loc3 = new Point(_3zombie3.getOriginalX(), Application.HEIGHT - 165);
-        Point _3zombie6Loc4 = new Point(110, Application.HEIGHT - 165);
-        _3zombie6.moveSquaredStartLeftRight(_3zombie6Loc1, _3zombie6Loc2, _3zombie6Loc3, _3zombie6Loc4, delta );
+        int x_4 = 10;
+        int y_4 = Application.HEIGHT - 65;
+        for(int i = 3; i < 6; i++){
+            Zombie currZombie = thirdObstacle.get(i);
+            Point currZombieLoc1 = new Point(x_4, thirdObstacle.get(i-3).getOriginalY());
+            Point currZombieLoc2 = thirdObstacle.get(i-3).getOriginalPosition();
+            Point currZombieLoc3 = new Point(firstObstacle.get(i-3).getOriginalX(), y_4);
+            Point currZombieLoc4 = new Point(x_4, y_4);
+            currZombie.moveSquaredStartLeftRight(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4, delta);
+            x_4 += 50;
+            y_4 -= 50;
+        }
 
         Zombie _3zombie7 = thirdObstacle.get(6);
         Point _3zombie7Loc1 = _3zombie7.getOriginalPosition();
