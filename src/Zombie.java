@@ -15,14 +15,10 @@ public class Zombie extends Living {
         setOriginalPosition(location);
         setSpeed(speed);
         setHitBox(new Circle(0, 0, 30));
-        SpriteSheet zombieDown = new SpriteSheet("images/zombieDown.png", 64, 64);
-        SpriteSheet zombieLeft = new SpriteSheet("images/zombieLeft.png", 64, 64);
-        SpriteSheet zombieRight = new SpriteSheet("images/zombieRight.png", 64, 64);
-        SpriteSheet zombieUp = new SpriteSheet("images/zombieUp.png", 64, 64);
-        zombieMoveUp = new Animation(zombieUp, 500);
-        zombieMoveLeft = new Animation(zombieLeft, 500);
-        zombieMoveRight = new Animation(zombieRight, 500);
-        zombieMoveDown = new Animation(zombieDown, 500);
+        zombieMoveUp = new Animation(new SpriteSheet("images/zombieUp.png", 64, 64), 500);
+        zombieMoveLeft = new Animation(new SpriteSheet("images/zombieLeft.png", 64, 64), 500);
+        zombieMoveRight = new Animation(new SpriteSheet("images/zombieRight.png", 64, 64), 500);
+        zombieMoveDown = new Animation(new SpriteSheet("images/zombieDown.png", 64, 64), 500);
         setCurrZombieAnimation(zombieMoveRight);
     }
     
