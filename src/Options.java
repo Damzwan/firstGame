@@ -21,12 +21,15 @@ public class Options extends BasicGameState{
          font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF,java.awt.Font.BOLD , 50), false);
          on = "ON";
          off = "OFF";
-         isFullScreen = true;
          isMusic = true;
+         isFullScreen = true;
+         showFps = true;
+
          status1 = on;
-         status2 = off;
+         status2 = on;
          status3 = off;
          status4 = on;
+
          map = new Image("images/mainMenu.png");
     }
 
@@ -94,12 +97,12 @@ public class Options extends BasicGameState{
             if (!isMusic){
                 isMusic = true;
                 status4 = on;
-                MainMenu.music.resume();
+                MainMenu.backgroundMusic.resume();
             }
             else{
                 isMusic = false;
                 status4 = off;
-                MainMenu.music.pause();
+                MainMenu.backgroundMusic.pause();
             }
         }
     }

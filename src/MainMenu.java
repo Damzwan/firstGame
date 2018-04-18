@@ -15,7 +15,7 @@ import java.util.List;
 public class MainMenu extends BasicGameState {
 
     private Image map;
-    public static Music music;
+    public static Music backgroundMusic;
     private TrueTypeFont font;
 
     @Override
@@ -25,9 +25,9 @@ public class MainMenu extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        music = new Music("items/music/background.ogg");
-        music.setVolume(60);
-        music.loop();
+        backgroundMusic = new Music("items/music/background.ogg");
+        backgroundMusic.setVolume(10);
+        backgroundMusic.loop();
         map = new Image("images/mainMenu.png");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF,java.awt.Font.BOLD , 50), false);
     }
@@ -59,7 +59,7 @@ public class MainMenu extends BasicGameState {
         if (gc.getInput().isKeyPressed(Input.KEY_O)) sbg.enterState(2, new FadeOutTransition(), new FadeInTransition());
         if (gc.getInput().isKeyPressed(Input.KEY_T)){
             sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
-            music.pause();
+            backgroundMusic.pause();
         }
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) gc.exit();
     }

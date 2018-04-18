@@ -18,7 +18,8 @@ public class Player extends Living{
         setEnergyPoints(5);
         setLocation(location);
         setSpeed(speed);
-        setHitBox(new Circle(0, 0, 30));
+        setHitBox(new Circle(0,
+                0, 30));
         player = new Image("images/realAssassin.png");
         dot = new Image("images/dot.png");
         blink = new Music("music/blink.ogg");

@@ -18,10 +18,10 @@ public class Tutorial extends BasicGameState {
     private Music music;
     private TrueTypeFont font;
     private List<List<Zombie>> allObstacles = new ArrayList<>();
-    private Player player1;
+    private  Player player1;
     private Shape end;
     private Shape outOfBound;
-    public List<Shape> outOfMap = new ArrayList<>();
+    public  List<Shape> outOfMap = new ArrayList<>();
 
     @Override
     public int getID() {
@@ -153,7 +153,7 @@ public class Tutorial extends BasicGameState {
 
         //inputs
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)){
-            MainMenu.music.resume();
+            MainMenu.backgroundMusic.resume();
             sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
         }
         if (gc.getInput().isKeyPressed(Input.KEY_R)) reset(sbg);
@@ -164,9 +164,9 @@ public class Tutorial extends BasicGameState {
         if (player1.getHealth() <= 0) reset(sbg);
 
         //If out of map
-        for (Shape currShape: outOfMap){
-            if (currShape.intersects(player1.getHitBox())) reset(sbg);
-        }
+        //for (Shape currShape: outOfMap){
+            //if (currShape.intersects(player1.getHitBox())) reset(sbg);
+        //}
 
 
         //zombie setup
@@ -241,7 +241,7 @@ public class Tutorial extends BasicGameState {
 
     public void endGame(StateBasedGame sbg){
         if (player1.getHitBox().intersects(end)){
-            MainMenu.music.resume();
+            MainMenu.backgroundMusic.resume();
             reset(sbg);
             sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
         }
