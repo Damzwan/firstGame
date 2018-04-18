@@ -14,11 +14,11 @@ public class Player extends Living{
 
 
     public Player(Point location, float speed) throws SlickException {
-        setHealth(5);
-        setEnergyPoints(10);
+        setHealth(2);
+        setEnergyPoints(5);
         setLocation(location);
         setSpeed(speed);
-        setHitBox(new Circle(0, 0, 35));
+        setHitBox(new Circle(0, 0, 30));
         player = new Image("images/realAssassin.png");
         dot = new Image("images/dot.png");
         blink = new Music("music/blink.ogg");
@@ -42,7 +42,7 @@ public class Player extends Living{
 
         setHitBoxLocation(new Point(getX() + 96/2, getY() + 75/2));
 
-        if (gc.getInput().isKeyDown(Input.KEY_Z)){
+        if (gc.getInput().isKeyDown(Input.KEY_W)){
             setLocation(new Point(getX(), getY() - delta*getSpeed()));
         }
 
@@ -50,7 +50,7 @@ public class Player extends Living{
             setLocation(new Point(getX(), getY() + delta*getSpeed()));
         }
 
-        if (gc.getInput().isKeyDown(Input.KEY_Q)){
+        if (gc.getInput().isKeyDown(Input.KEY_A)){
             setLocation(new Point(getX() - delta*getSpeed(), getY()));
         }
 

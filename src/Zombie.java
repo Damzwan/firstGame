@@ -14,14 +14,14 @@ public class Zombie extends Living {
         this.setLocation(location);
         setOriginalPosition(location);
         setSpeed(speed);
-        setHitBox(new Circle(0, 0, 30));
+        setHitBox(new Circle(0, 0, 25));
         zombieMoveUp = new Animation(new SpriteSheet("images/zombieUp.png", 64, 64), 500);
         zombieMoveLeft = new Animation(new SpriteSheet("images/zombieLeft.png", 64, 64), 500);
         zombieMoveRight = new Animation(new SpriteSheet("images/zombieRight.png", 64, 64), 500);
         zombieMoveDown = new Animation(new SpriteSheet("images/zombieDown.png", 64, 64), 500);
         setCurrZombieAnimation(zombieMoveRight);
     }
-    
+
     public void moveHorizontalLeftToRight(Point loc1, Point loc2, int delta){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
         if (getX() < loc2.getX() && condition) moveRight(delta);

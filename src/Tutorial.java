@@ -1,5 +1,6 @@
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
@@ -20,6 +21,7 @@ public class Tutorial extends BasicGameState {
     private Player player1;
     private Shape end;
     private Shape outOfBound;
+    public List<Shape> outOfMap = new ArrayList<>();
 
     @Override
     public int getID() {
@@ -33,6 +35,10 @@ public class Tutorial extends BasicGameState {
         outOfBound = new Rectangle(610, 0, Application.WIDTH - 610, 750);
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF,java.awt.Font.BOLD , 40), false);
         player1 = new Player(new Point(10, 10), .2f);
+        outOfMap.add(new Line(0, 0, 0, Application.HEIGHT));
+        outOfMap.add(new Line(0, 0, Application.WIDTH, 0));
+        outOfMap.add(new Line(0, Application.HEIGHT, Application.WIDTH, Application.HEIGHT));
+        outOfMap.add(new Line(Application.WIDTH, 0, Application.WIDTH, Application.HEIGHT));
         
         for (int i = 0; i < 4; i++){
             allObstacles.add(new ArrayList<>());
@@ -154,6 +160,11 @@ public class Tutorial extends BasicGameState {
         player1.setup(gc, delta);
         if (player1.getHealth() <= 0) reset(sbg);
 
+        //If out of map
+        for (Shape currShape: outOfMap){
+            if (currShape.intersects(player1.getHitBox())) reset(sbg);
+        }
+
 
         //zombie setup
 
@@ -220,13 +231,14 @@ public class Tutorial extends BasicGameState {
 
     public void reset(StateBasedGame sbg){
         sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
-        player1.setHealth(5);
-        player1.setEnergyPoints(10);
+        player1.setHealth(2);
+        player1.setEnergyPoints(5);
         player1.setLocation(new Point(10, 10));
     }
 
     public void endGame(StateBasedGame sbg){
         if (player1.getHitBox().intersects(end)){
+            reset(sbg);
             sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
         }
     }
