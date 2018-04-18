@@ -79,7 +79,7 @@ public class Tutorial extends BasicGameState {
         for (int i = 0; i < 11; i++){
             addZombie(allObstacles.get(3), new Zombie(new Point(x_pos, y_pos), speed));
             x_pos+= 60;
-            y_pos += 30;
+            y_pos += 25;
         }
     }
 
