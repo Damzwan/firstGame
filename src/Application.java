@@ -7,8 +7,9 @@ public class Application extends StateBasedGame {
 
     public static final int WIDTH   = 1920;
     public static final int HEIGHT  = 1080;
-    public static final int FPS     = 120;
-    public static final double VERSION = 1.0;
+    private static final int FPS     = 120;
+    private static final double VERSION = 1.0;
+    private static AppGameContainer app;
 
     public Application(String appName) {
         super(appName);
@@ -18,13 +19,13 @@ public class Application extends StateBasedGame {
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         this.addState(new MainMenu());
         this.addState(new Tutorial());
-        //this.addState(new Options());
+        this.addState(new Options());
     }
 
     public static void main(String[] args) {
         try {
-            AppGameContainer app = new AppGameContainer(new Application("Zombie escape" + VERSION));
-            app.setDisplayMode(WIDTH, HEIGHT, false);
+            app = new AppGameContainer(new Application("Zombie escape" + VERSION));
+            app.setDisplayMode(WIDTH, HEIGHT, true);
             app.setTargetFrameRate(FPS);
             app.setShowFPS(true);
             app.start();
@@ -32,4 +33,18 @@ public class Application extends StateBasedGame {
             e.printStackTrace();
         }
     }
+
+    public static void setFullScreen(boolean isFullScreen) throws SlickException {
+        app.setDisplayMode(WIDTH, HEIGHT, isFullScreen);
+    }
+
+    public static void setShowFPS(boolean isFps){
+        app.setShowFPS(isFps);
+    }
+
+    public static void setVSync(boolean isVSync){
+        app.setVSync(isVSync);
+    }
+
+
 }

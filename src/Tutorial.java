@@ -152,7 +152,10 @@ public class Tutorial extends BasicGameState {
         endGame(sbg);
 
         //inputs
-        if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) gc.exit();
+        if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)){
+            MainMenu.music.resume();
+            sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
+        }
         if (gc.getInput().isKeyPressed(Input.KEY_R)) reset(sbg);
 
         //player setup
@@ -238,6 +241,7 @@ public class Tutorial extends BasicGameState {
 
     public void endGame(StateBasedGame sbg){
         if (player1.getHitBox().intersects(end)){
+            MainMenu.music.resume();
             reset(sbg);
             sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
         }
