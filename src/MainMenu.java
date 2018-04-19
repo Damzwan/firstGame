@@ -2,6 +2,7 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
@@ -17,6 +18,8 @@ public class MainMenu extends BasicGameState {
     private Image map;
     public static Music backgroundMusic;
     private TrueTypeFont font;
+    public static List<Shape> outOfMap = new ArrayList<>();
+
 
     @Override
     public int getID() {
@@ -25,6 +28,10 @@ public class MainMenu extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        outOfMap.add(new Line(0, 0, 0, Application.HEIGHT));
+        outOfMap.add(new Line(0, 0, Application.WIDTH, 0));
+        outOfMap.add(new Line(0, Application.HEIGHT, Application.WIDTH, Application.HEIGHT));
+        outOfMap.add(new Line(Application.WIDTH, 0, Application.WIDTH, Application.HEIGHT));
         backgroundMusic = new Music("items/music/background.ogg");
         backgroundMusic.setVolume(10);
         backgroundMusic.loop();
@@ -64,6 +71,10 @@ public class MainMenu extends BasicGameState {
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) gc.exit();
     }
 
+    public static boolean isOutOfMap(Point location){
+        return location.getX() < 0 || location.getX() >= Application.WIDTH - 75
+                || location.getY() < 0 || location.getY() >= Application.HEIGHT - 65;
+    }
 
 
 

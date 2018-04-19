@@ -11,6 +11,7 @@ public class Application extends StateBasedGame {
     private static final double VERSION = 1.0;
     private static AppGameContainer app;
 
+
     public Application(String appName) {
         super(appName);
     }

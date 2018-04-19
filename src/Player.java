@@ -14,7 +14,7 @@ public class Player extends Living{
 
 
     public Player(Point location, float speed) throws SlickException {
-        setHealth(2);
+        setHealth(100);
         setEnergyPoints(5);
         setLocation(location);
         setSpeed(speed);
@@ -44,18 +44,22 @@ public class Player extends Living{
         setHitBoxLocation(new Point(getX() + 96/2, getY() + 75/2));
 
         if (gc.getInput().isKeyDown(Input.KEY_W)){
+            if (MainMenu.outOfMap.get(1).intersects(getHitBox())) return;
             setLocation(new Point(getX(), getY() - delta*getSpeed()));
         }
 
         if (gc.getInput().isKeyDown(Input.KEY_S)){
+            if (MainMenu.outOfMap.get(2).intersects(getHitBox())) return;
             setLocation(new Point(getX(), getY() + delta*getSpeed()));
         }
 
         if (gc.getInput().isKeyDown(Input.KEY_A)){
+            if (MainMenu.outOfMap.get(0).intersects(getHitBox())) return;
             setLocation(new Point(getX() - delta*getSpeed(), getY()));
         }
 
         if (gc.getInput().isKeyDown(Input.KEY_D)){
+            if (MainMenu.outOfMap.get(3).intersects(getHitBox())) return;
             setLocation(new Point(getX() + delta*getSpeed(), getY()));
         }
     }
@@ -89,16 +93,19 @@ public class Player extends Living{
             if (getEnergyPoints() <= 0) return;
             double distance = getDistance(getX(), getMousePosX(), getY(), getMousePosY(gc));
             if (distance >= 200){
-                blink.play();
                 float x = getX() + (float) (200*Math.cos(Math.toRadians(getAngle()))) - 106/3;
                 float y = getY() + (float) (200*Math.sin(Math.toRadians(getAngle()))) - 112/3;
+                System.out.println(MainMenu.isOutOfMap(new Point(x, y)));
+                if (MainMenu.isOutOfMap(new Point(x, y))) return;
+                blink.play();
                 setLocation(new Point(x, y));
                 setEnergyPoints(getEnergyPoints() - 1);
             }
             else {
-                blink.play();
                 float x = getMousePosX() - 106/3;
                 float y = getMousePosY(gc) - 112/3;
+                if (MainMenu.isOutOfMap(new Point(x, y))) return;
+                blink.play();
                 setLocation(new Point(x, y));
                 setEnergyPoints(getEnergyPoints() - 1);
             }
