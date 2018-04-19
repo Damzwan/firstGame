@@ -7,6 +7,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,11 +17,14 @@ public class Tutorial extends BasicGameState {
     private Image map;
     private Music music;
     private TrueTypeFont font;
-    private List<List<Zombie>> allObstacles = new ArrayList<>();
+    private List<List<Zombie>> obstacles = new ArrayList<>();
     private Player player1;
     private Shape end;
-    private Shape outOfBound;
-    public List<Shape> outOfMap = new ArrayList<>();
+    /*private Shape outOfBound;
+    public List<Shape> outOfMap = new ArrayList<>();*/
+
+    private List<Shape> walls = new ArrayList<>();
+
 
     @Override
     public int getID() {
@@ -31,19 +35,23 @@ public class Tutorial extends BasicGameState {
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         map = new Image("images/mainMenu.png");
         end = new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64);
-        outOfBound = new Rectangle(610, 0, Application.WIDTH - 610, 750);
+        walls.add(new Rectangle(610, 0, Application.WIDTH - 610, 750));
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 40), false);
-        player1 = new Player(new Point(10, 10), .2f);
+        try {
+            player1 = new Player(new Point(10, 10), 2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         for (int i = 0; i < 4; i++) {
-            allObstacles.add(new ArrayList<>());
+            obstacles.add(new ArrayList<>());
         }
 
         //first obstacle initialization
         int x_pos1 = 10;
         int y_pos1 = 350;
         for (int i = 0; i < 12; i++) {
-            addZombie(allObstacles.get(0), new Zombie(new Point(x_pos1, y_pos1), .2f));
+            addZombie(obstacles.get(0), new Zombie(new Point(x_pos1, y_pos1), 2));
             x_pos1 += 50;
         }
 
@@ -51,28 +59,28 @@ public class Tutorial extends BasicGameState {
         int x_pos2 = 10;
         int y_pos2 = 700;
         for (int i = 0; i < 12; i++) {
-            addZombie(allObstacles.get(1), new Zombie(new Point(x_pos2, y_pos2), .2f));
+            addZombie(obstacles.get(1), new Zombie(new Point(x_pos2, y_pos2), 2));
             x_pos2 += 50;
         }
 
         //third obstacle initialization
-        Zombie zombie25 = new Zombie(new Point(560, 750), .4f);
-        Zombie zombie26 = new Zombie(new Point(510, 800), .3f);
-        Zombie zombie27 = new Zombie(new Point(460, 850), .2f);
+        Zombie zombie25 = new Zombie(new Point(560, 750), 4);
+        Zombie zombie26 = new Zombie(new Point(510, 800), 3);
+        Zombie zombie27 = new Zombie(new Point(460, 850), 2);
 
-        Zombie zombie28 = new Zombie(new Point(10, 750), .4f);
-        Zombie zombie29 = new Zombie(new Point(60, 800), .3f);
-        Zombie zombie30 = new Zombie(new Point(110, 850), .2f);
+        Zombie zombie28 = new Zombie(new Point(10, 750), 4);
+        Zombie zombie29 = new Zombie(new Point(60, 800), 3);
+        Zombie zombie30 = new Zombie(new Point(110, 850), 2);
 
-        Zombie zombie31 = new Zombie(new Point(610, 750), .4f);
-        addZombie(allObstacles.get(2), zombie25, zombie26, zombie27, zombie28, zombie29, zombie30, zombie31);
+        Zombie zombie31 = new Zombie(new Point(610, 750), 4);
+        addZombie(obstacles.get(2), zombie25, zombie26, zombie27, zombie28, zombie29, zombie30, zombie31);
 
         //fourth obstacle initialization
         int x_pos = 860;
         int y_pos = 750;
-        float speed = .3f;
+        float speed = 3;
         for (int i = 0; i < 11; i++) {
-            addZombie(allObstacles.get(3), new Zombie(new Point(x_pos, y_pos), speed));
+            addZombie(obstacles.get(3), new Zombie(new Point(x_pos, y_pos), speed));
             x_pos += 60;
             y_pos += 25;
         }
@@ -85,7 +93,10 @@ public class Tutorial extends BasicGameState {
         g.setFont(font);
 
         g.setColor(Color.red);
-        g.draw(outOfBound);
+
+        for (Shape wall : walls) {
+            g.draw(wall);
+        }
 
         //render the player
         g.setColor(Color.red);
@@ -94,7 +105,7 @@ public class Tutorial extends BasicGameState {
         player1.getDot().draw(player1.getDotX(), player1.getDotY());
 
         //render the zombies
-        for (List<Zombie> currList : allObstacles) {
+        for (List<Zombie> currList : obstacles) {
             for (Zombie currZombie : currList) {
                 currZombie.getCurrZombieAnimation().draw(currZombie.getX(), currZombie.getY());
                 g.draw(currZombie.getHitBox());
@@ -142,7 +153,7 @@ public class Tutorial extends BasicGameState {
     }
 
     @Override
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+    public void update(GameContainer gc, StateBasedGame sbg, int _delta) throws SlickException {
         //end the game if target at blue location
         endGame(sbg);
 
@@ -154,30 +165,31 @@ public class Tutorial extends BasicGameState {
         if (gc.getInput().isKeyPressed(Input.KEY_R)) reset(sbg);
 
         //player setup
-        if (player1.getHitBox().intersects(outOfBound)) reset(sbg);
-        player1.setup(gc, delta);
+//        if (player1.getHitBox().intersects(outOfBound)) reset(sbg);
+        player1.setup(gc);
         if (player1.getHealth() <= 0) reset(sbg);
 
         //If out of map
-        for (Shape currShape: outOfMap){
-            if (currShape.intersects(player1.getHitBox())){
-                reset(sbg); }
+        for (Shape wall : walls) {
+            if (wall.intersects(player1.getHitBox())) {
+                reset(sbg);
+            }
         }
 
 
         //zombie setup
 
         //set hitboxes
-        for (List<Zombie> currList : allObstacles) {
+        for (List<Zombie> currList : obstacles) {
             for (Zombie currZombie : currList) {
                 player1.getDamage(currZombie.getHitBox());
             }
         }
 
-        for (Zombie currZombie : allObstacles.get(0)) {
+        for (Zombie currZombie : obstacles.get(0)) {
             currZombie.stand();
         }
-        for (Zombie currZombie : allObstacles.get(1)) {
+        for (Zombie currZombie : obstacles.get(1)) {
             currZombie.stand();
         }
 
@@ -187,12 +199,12 @@ public class Tutorial extends BasicGameState {
 
         for (int i = 0; i < 3; i++) {
             Point originalPosition = new Point(560, 750);
-            Zombie currZombie = allObstacles.get(2).get(i);
+            Zombie currZombie = obstacles.get(2).get(i);
             Point currZombieLoc1 = currZombie.getOriginalPosition();
             Point currZombieLoc2 = new Point(x_3, originalPosition.getY());
             Point currZombieLoc3 = new Point(x_3, y_3);
             Point currZombieLoc4 = new Point(originalPosition.getX(), y_3);
-            currZombie.moveSquaredStartRightLeft(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4, delta);
+            currZombie.moveSquaredStartRightLeft(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4);
             x_3 += 50;
             y_3 -= 50;
         }
@@ -200,27 +212,38 @@ public class Tutorial extends BasicGameState {
         int x_4 = 10;
         int y_4 = Application.HEIGHT - 65;
         for (int i = 3; i < 6; i++) {
-            Zombie currZombie = allObstacles.get(2).get(i);
-            Point currZombieLoc1 = new Point(x_4, allObstacles.get(2).get(i - 3).getOriginalY());
-            Point currZombieLoc2 = allObstacles.get(2).get(i - 3).getOriginalPosition();
-            Point currZombieLoc3 = new Point(allObstacles.get(0).get(i - 3).getOriginalX(), y_4);
+            Zombie currZombie = obstacles.get(2).get(i);
+            Point currZombieLoc1 = new Point(x_4, obstacles.get(2).get(i - 3).getOriginalY());
+            Point currZombieLoc2 = obstacles.get(2).get(i - 3).getOriginalPosition();
+            Point currZombieLoc3 = new Point(obstacles.get(0).get(i - 3).getOriginalX(), y_4);
             Point currZombieLoc4 = new Point(x_4, y_4);
-            currZombie.moveSquaredStartLeftRight(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4, delta);
+            currZombie.moveSquaredStartLeftRight(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4);
             x_4 += 50;
             y_4 -= 50;
         }
 
-        Zombie _3zombie7 = allObstacles.get(2).get(6);
+        Zombie _3zombie7 = obstacles.get(2).get(6);
         Point _3zombie7Loc1 = _3zombie7.getOriginalPosition();
         Point _3zombie7Loc2 = new Point(_3zombie7Loc1.getX(), Application.HEIGHT - 65);
-        _3zombie7.moveVerticalUpToDown(_3zombie7Loc1, _3zombie7Loc2, delta);
+        _3zombie7.moveVerticalUpToDown(_3zombie7Loc1, _3zombie7Loc2);
 
         //fourth obstacle
-        for (Zombie currZombie : allObstacles.get(3)) {
+        for (Zombie currZombie : obstacles.get(3)) {
             currZombie.moveVerticalUpToDown(new Point(860, 750),
-                    new Point(860, Application.HEIGHT - 65), delta);
+                    new Point(860, Application.HEIGHT - 65));
         }
+
+        Zombie last = obstacles.get(3).get(obstacles.get(3).size() - 1);
+        Zombie secondLast = obstacles.get(3).get(obstacles.get(3).size() - 2);
+        if (last.condition == secondLast.condition){
+            System.out.println(Math.abs(last.getY() - secondLast.getY()));
+            System.out.println("Speed Last:" +  last.getSpeed());
+            System.out.println("speed secondLast: " + secondLast.getSpeed());
+        }
+
     }
+
+    int i = 0;
 
     public void addZombie(List<Zombie> lst, Zombie... zombies) {
         lst.addAll(Arrays.asList(zombies));

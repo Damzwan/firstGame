@@ -53,7 +53,7 @@ public class Options extends BasicGameState{
     }
 
     @Override
-    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+    public void update(GameContainer gc, StateBasedGame sbg, int _delta) throws SlickException {
 
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
 

@@ -6,7 +6,7 @@ import org.newdawn.slick.geom.Shape;
 
 public class Zombie extends Living {
     private Animation zombieMoveUp, zombieMoveDown, zombieMoveLeft, zombieMoveRight, currZombieAnimation;
-    private boolean condition = true;
+    public boolean condition = true; //TODO private
     private Point originalPosition;
 
 
@@ -15,6 +15,7 @@ public class Zombie extends Living {
         setOriginalPosition(location);
         setSpeed(speed);
         setHitBox(new Circle(0, 0, 25));
+        //TODO make image static; also in player
         zombieMoveUp = new Animation(new SpriteSheet("images/zombieUp.png", 64, 64), 500);
         zombieMoveLeft = new Animation(new SpriteSheet("images/zombieLeft.png", 64, 64), 500);
         zombieMoveRight = new Animation(new SpriteSheet("images/zombieRight.png", 64, 64), 500);
@@ -22,80 +23,72 @@ public class Zombie extends Living {
         setCurrZombieAnimation(zombieMoveRight);
     }
 
-    public void moveHorizontalLeftToRight(Point loc1, Point loc2, int delta){
+    public void moveHorizontalLeftToRight(Point loc1, Point loc2){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
-        if (getX() < loc2.getX() && condition) moveRight(delta);
+        if (getX() < loc2.getX() && condition) moveRight();
         else {
-            moveLeft(delta);
+            moveLeft();
             condition = getX() < loc1.getX();
         }
     }
 
-    public void moveHorizontalRightToLeft(Point loc1, Point loc2, int delta){
+    public void moveHorizontalRightToLeft(Point loc1, Point loc2){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
-        if (getX() > loc2.getX() && condition) moveLeft(delta);
+        if (getX() > loc2.getX() && condition) moveLeft();
         else {
-            moveRight(delta);
+            moveRight();
             condition = getX() > loc1.getX();
         }
     }
 
-    public void moveVerticalUpToDown(Point loc1, Point loc2, int delta){
+    public void moveVerticalUpToDown(Point loc1, Point loc2){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
-        if (getY() < loc2.getY() && condition) moveDown(delta);
+        if (getY() < loc2.getY() && condition)
+            moveDown();
         else{
-            moveUp(delta);
+            moveUp();
             condition = getY() < loc1.getY();
         }
     }
 
-    public void moveVerticalDownToUp(Point loc1, Point loc2, int delta){
+    public void moveSquaredStartLeftRight(Point loc1, Point loc2, Point loc3, Point loc4){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
-        if (getY() > loc2.getY() && condition) moveUp(delta);
-        else {
-            moveDown(delta);
-            condition = getY() > loc1.getY();
-        }
+        if (getX() <= loc2.getX() && getY() <= loc1.getY()) moveRight();
+        if (getY() <= loc3.getY() && getX() >= loc2.getX()) moveDown();
+        if (getX() >= loc4.getX() && getY() >= loc3.getY()) moveLeft();
+        if (getY() >= loc1.getY() && getX() <= loc4.getX()) moveUp();
     }
 
-    public void moveSquaredStartLeftRight(Point loc1, Point loc2, Point loc3, Point loc4, int delta){
+    public void moveSquaredStartRightLeft(Point loc1, Point loc2, Point loc3, Point loc4){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
-        if (getX() <= loc2.getX() && getY() <= loc1.getY()) moveRight(delta);
-        if (getY() <= loc3.getY() && getX() >= loc2.getX()) moveDown(delta);
-        if (getX() >= loc4.getX() && getY() >= loc3.getY()) moveLeft(delta);
-        if (getY() >= loc1.getY() && getX() <= loc4.getX()) moveUp(delta);
+        if (getX() >= loc2.getX() && getY() <= loc1.getY()) moveLeft();
+        if (getY() <= loc3.getY() && getX() <= loc2.getX()) moveDown();
+        if (getX() <= loc4.getX() && getY() >= loc3.getY()) moveRight();
+        if (getY() >= loc1.getY() && getX() >= loc4.getX()) moveUp();
     }
 
-    public void moveSquaredStartRightLeft(Point loc1, Point loc2, Point loc3, Point loc4, int delta){
-        setHitBoxLocation(new Point(getX() + 30, getY() + 30));
-        if (getX() >= loc2.getX() && getY() <= loc1.getY()) moveLeft(delta);
-        if (getY() <= loc3.getY() && getX() <= loc2.getX()) moveDown(delta);
-        if (getX() <= loc4.getX() && getY() >= loc3.getY()) moveRight(delta);
-        if (getY() >= loc1.getY() && getX() >= loc4.getX()) moveUp(delta);
-    }
-
-    public void moveDiagonalLeftRight(Point loc1, Point loc2, int delta){
+    public void moveDiagonalLeftRight(Point loc1, Point loc2){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
         if (getX() <= loc2.getX() && getY() <= loc2.getY() && condition){
-            moveDown(delta);
-            moveRight(delta);
+            moveDown();
+            moveRight();
         }
         else {
-            moveUp(delta);
-            moveLeft(delta);
+            moveUp();
+            moveLeft();
             condition = getX() <= loc1.getX() && getY() <= loc1.getY();
         }
     }
 
-    public void moveDiagonalRightLeft(Point loc1, Point loc2, int delta){
+    public void moveDiagonalRightLeft(Point loc1, Point loc2){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
         if (getX() >= loc2.getX() && getY() <= loc2.getY() && condition){
-            moveDown(delta);
-            moveLeft(delta);
+            moveDown();
+            moveLeft();
         }
         else{
-            moveUp(delta);
-            moveRight(delta);
+            moveUp();
+            moveRight();
             condition = getX() >= loc1.getX() && getY() <= loc1.getY();
         }
     }
@@ -107,24 +100,24 @@ public class Zombie extends Living {
         setLocation(getOriginalPosition());
     }
 
-    public void moveRight(int delta){
+    public void moveRight(){
         setCurrZombieAnimation(zombieMoveRight);
-        setLocation(new Point(getX() + delta*getSpeed(), getY()));
+        setLocation(new Point(getX() + getSpeed(), getY()));
     }
 
-    public void moveLeft(int delta){
+    public void moveLeft(){
         setCurrZombieAnimation(zombieMoveLeft);
-        setLocation(new Point(getX() - delta*getSpeed(), getY()));
+        setLocation(new Point(getX() - getSpeed(), getY()));
     }
 
-    public void moveUp(int delta){
+    public void moveUp(){
         setCurrZombieAnimation(zombieMoveUp);
-        setLocation(new Point(getX(), getY() - delta*getSpeed()));
+        setLocation(new Point(getX(), getY() - getSpeed()));
     }
 
-    public void moveDown(int delta){
+    public void moveDown(){
         setCurrZombieAnimation(zombieMoveDown);
-        setLocation(new Point(getX(), getY() + delta*getSpeed()));
+        setLocation(new Point(getX(), getY() + getSpeed()));
     }
 
     public Animation getCurrZombieAnimation() {
