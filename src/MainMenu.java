@@ -33,7 +33,7 @@ public class MainMenu extends BasicGameState {
         outOfMap.add(new Line(0, Application.HEIGHT, Application.WIDTH, Application.HEIGHT));
         outOfMap.add(new Line(Application.WIDTH, 0, Application.WIDTH, Application.HEIGHT));
         backgroundMusic = new Music("items/music/background.ogg");
-        backgroundMusic.loop(1.0f, 0.1f);
+        backgroundMusic.loop(1.0f, 0.5f);
         map = new Image("images/mainMenu.png");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF,java.awt.Font.BOLD , 50), false);
     }
