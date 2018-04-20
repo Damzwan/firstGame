@@ -5,7 +5,21 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
 public class Zombie extends Living {
-    private Animation zombieMoveUp, zombieMoveDown, zombieMoveLeft, zombieMoveRight, currZombieAnimation;
+    private static Animation zombieMoveUp, zombieMoveDown, zombieMoveLeft, zombieMoveRight;
+    private Animation currZombieAnimation;
+
+    static {
+        try {
+            zombieMoveDown = new Animation(new SpriteSheet("images/zombieDown.png", 64, 64), 500);
+            zombieMoveLeft = new Animation(new SpriteSheet("images/zombieLeft.png", 64, 64), 500);
+            zombieMoveRight = new Animation(new SpriteSheet("images/zombieRight.png", 64, 64), 500);
+            zombieMoveUp = new Animation(new SpriteSheet("images/zombieUp.png", 64, 64), 500);
+
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean condition = true; //TODO private
     private Point originalPosition;
 
@@ -15,15 +29,10 @@ public class Zombie extends Living {
         setOriginalPosition(location);
         setSpeed(speed);
         setHitBox(new Circle(0, 0, 25));
-        //TODO make image static; also in player
-        zombieMoveUp = new Animation(new SpriteSheet("images/zombieUp.png", 64, 64), 500);
-        zombieMoveLeft = new Animation(new SpriteSheet("images/zombieLeft.png", 64, 64), 500);
-        zombieMoveRight = new Animation(new SpriteSheet("images/zombieRight.png", 64, 64), 500);
-        zombieMoveDown = new Animation(new SpriteSheet("images/zombieDown.png", 64, 64), 500);
         setCurrZombieAnimation(zombieMoveRight);
     }
 
-    public void moveHorizontalLeftToRight(Point loc1, Point loc2){
+    public void moveHorizontal(Point loc1, Point loc2){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
         if (getX() < loc2.getX() && condition) moveRight();
         else {
@@ -32,16 +41,7 @@ public class Zombie extends Living {
         }
     }
 
-    public void moveHorizontalRightToLeft(Point loc1, Point loc2){
-        setHitBoxLocation(new Point(getX() + 30, getY() + 30));
-        if (getX() > loc2.getX() && condition) moveLeft();
-        else {
-            moveRight();
-            condition = getX() > loc1.getX();
-        }
-    }
-
-    public void moveVerticalUpToDown(Point loc1, Point loc2){
+    public void moveVertical(Point loc1, Point loc2){
         setHitBoxLocation(new Point(getX() + 30, getY() + 30));
         if (getY() < loc2.getY() && condition)
             moveDown();
@@ -100,22 +100,22 @@ public class Zombie extends Living {
         setLocation(getOriginalPosition());
     }
 
-    public void moveRight(){
+    private void moveRight(){
         setCurrZombieAnimation(zombieMoveRight);
         setLocation(new Point(getX() + getSpeed(), getY()));
     }
 
-    public void moveLeft(){
+    private void moveLeft(){
         setCurrZombieAnimation(zombieMoveLeft);
         setLocation(new Point(getX() - getSpeed(), getY()));
     }
 
-    public void moveUp(){
+    private void moveUp(){
         setCurrZombieAnimation(zombieMoveUp);
         setLocation(new Point(getX(), getY() - getSpeed()));
     }
 
-    public void moveDown(){
+    private void moveDown(){
         setCurrZombieAnimation(zombieMoveDown);
         setLocation(new Point(getX(), getY() + getSpeed()));
     }

@@ -5,17 +5,27 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.StateBasedGame;
+import sun.applet.Main;
 
 import java.io.IOException;
 
 public class Player extends Living {
     private int health, energyPoints;
-    private Image player, dot;
+    private static Image player, dot;
     private Point dotLocation;
     private float angle;
-    private Audio blink;
+    private static Audio blink;
     int invincibility = -1;
 
+    static {
+        try {
+            player = new Image("images/realAssassin.png");
+            dot = new Image("images/dot.png");
+            blink = SoundStore.get().getOgg("music/blink.ogg");
+        } catch (SlickException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Player(Point location, float speed) throws SlickException, IOException {
         setHealth(100);
@@ -24,9 +34,6 @@ public class Player extends Living {
         setSpeed(speed);
         setHitBox(new Circle(0,
                 0, 30));
-        player = new Image("images/realAssassin.png");
-        dot = new Image("images/dot.png");
-        blink = SoundStore.get().getOgg("music/blink.ogg");
         setDotLocation();
     }
 
@@ -50,25 +57,25 @@ public class Player extends Living {
         int dx = 0;
         int dy = 0;
 
-//        if (gc.getInput().isKeyDown(Input.KEY_W)) {
-//            dy = -1;
-//        }
-//        if (gc.getInput().isKeyDown(Input.KEY_S)) {
-//            dy = 1;
-//        }
-//        if (gc.getInput().isKeyDown(Input.KEY_A)) {
-//            dx = -1;
-//        }
-//        if (gc.getInput().isKeyDown(Input.KEY_D)) {
-//            dx = 1;
-//        }
+        if (gc.getInput().isKeyDown(Input.KEY_W)) {
+            dy = -1;
+        }
+        if (gc.getInput().isKeyDown(Input.KEY_S)) {
+            dy = 1;
+        }
+        if (gc.getInput().isKeyDown(Input.KEY_A)) {
+            dx = -1;
+        }
+        if (gc.getInput().isKeyDown(Input.KEY_D)) {
+            dx = 1;
+        }
 
-        Point next = new Point(getX() + dx*getSpeed(), getY()*getSpeed());
+        Point next = new Point(getX() + dx*getSpeed(), getY() + dy*getSpeed());
+        setLocation(next);
         //todo wurlt
 
 
-
-        if (gc.getInput().isKeyDown(Input.KEY_W)) {
+        /*if (gc.getInput().isKeyDown(Input.KEY_W)) {
             if (MainMenu.outOfMap.get(1).intersects(getHitBox())) return;
             setLocation(new Point(getX(), getY() - getSpeed()));
         }
@@ -86,8 +93,9 @@ public class Player extends Living {
         if (gc.getInput().isKeyDown(Input.KEY_D)) {
             if (MainMenu.outOfMap.get(3).intersects(getHitBox())) return;
             setLocation(new Point(getX() + getSpeed(), getY()));
-        }
+        }*/
     }
+
 
     public void sprint(GameContainer gc) {
         if (gc.getInput().isKeyDown(Input.KEY_E)) {
@@ -119,7 +127,7 @@ public class Player extends Living {
             if (distance >= 200) {
                 float x = getX() + (float) (200 * Math.cos(Math.toRadians(getAngle()))) - 106 / 3;
                 float y = getY() + (float) (200 * Math.sin(Math.toRadians(getAngle()))) - 112 / 3;
-                if (MainMenu.isOutOfMap(new Point(x, y))) return;
+                //if (MainMenu.isOutOfMap(new Point(x, y))) return;
                 setLocation(new Point(x, y));
                 setEnergyPoints(getEnergyPoints() - 1);
             } else {

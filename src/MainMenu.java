@@ -64,15 +64,18 @@ public class MainMenu extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int _delta) throws SlickException {
         if (gc.getInput().isKeyPressed(Input.KEY_O)) sbg.enterState(2, new FadeOutTransition(), new FadeInTransition());
         if (gc.getInput().isKeyPressed(Input.KEY_T)){
+            Tutorial.reset(sbg);
             sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
             backgroundMusic.pause();
         }
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) gc.exit();
     }
 
-    public static boolean isOutOfMap(Point location){
-        return location.getX() < 0 || location.getX() >= Application.WIDTH - 75
-                || location.getY() < 0 || location.getY() >= Application.HEIGHT - 65;
+    public static boolean collidesWithWall(){
+        for (Shape shape: Tutorial.getTutorialWalls()){
+            if (shape.intersects(Tutorial.getPlayer1().getHitBox())) return true;
+        }
+        return false;
     }
 
 

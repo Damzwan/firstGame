@@ -1,5 +1,6 @@
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
@@ -18,12 +19,12 @@ public class Tutorial extends BasicGameState {
     private Music music;
     private TrueTypeFont font;
     private List<List<Zombie>> obstacles = new ArrayList<>();
-    private Player player1;
+    private static Player player1;
     private Shape end;
     /*private Shape outOfBound;
     public List<Shape> outOfMap = new ArrayList<>();*/
 
-    private List<Shape> walls = new ArrayList<>();
+    private static List<Shape> walls = new ArrayList<>();
 
 
     @Override
@@ -36,6 +37,10 @@ public class Tutorial extends BasicGameState {
         map = new Image("images/mainMenu.png");
         end = new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64);
         walls.add(new Rectangle(610, 0, Application.WIDTH - 610, 750));
+        walls.add(new Line(0, 0, Application.WIDTH, 0));
+        walls.add(new Line(0, Application.HEIGHT, Application.WIDTH, Application.HEIGHT));
+        walls.add(new Line(0, 0, 0, Application.HEIGHT));
+        walls.add(new Line(Application.WIDTH, 0, Application.WIDTH, Application.HEIGHT));
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 40), false);
         try {
             player1 = new Player(new Point(10, 10), 2);
@@ -170,11 +175,11 @@ public class Tutorial extends BasicGameState {
         if (player1.getHealth() <= 0) reset(sbg);
 
         //If out of map
-        for (Shape wall : walls) {
-            if (wall.intersects(player1.getHitBox())) {
-                reset(sbg);
-            }
-        }
+        //for (Shape wall : walls) {
+            //if (wall.intersects(player1.getHitBox())) {
+                //reset(sbg);
+            //}
+        //}
 
 
         //zombie setup
@@ -225,11 +230,11 @@ public class Tutorial extends BasicGameState {
         Zombie _3zombie7 = obstacles.get(2).get(6);
         Point _3zombie7Loc1 = _3zombie7.getOriginalPosition();
         Point _3zombie7Loc2 = new Point(_3zombie7Loc1.getX(), Application.HEIGHT - 65);
-        _3zombie7.moveVerticalUpToDown(_3zombie7Loc1, _3zombie7Loc2);
+        _3zombie7.moveVertical(_3zombie7Loc1, _3zombie7Loc2);
 
         //fourth obstacle
         for (Zombie currZombie : obstacles.get(3)) {
-            currZombie.moveVerticalUpToDown(new Point(860, 750),
+            currZombie.moveVertical(new Point(860, 750),
                     new Point(860, Application.HEIGHT - 65));
         }
 
@@ -257,7 +262,7 @@ public class Tutorial extends BasicGameState {
         return gc.getInput().getMouseY();
     }
 
-    public void reset(StateBasedGame sbg) {
+    public static void reset(StateBasedGame sbg) {
         sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
         player1.setHealth(2);
         player1.setEnergyPoints(5);
@@ -270,6 +275,14 @@ public class Tutorial extends BasicGameState {
             reset(sbg);
             sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
         }
+    }
+
+    public static List<Shape> getTutorialWalls() {
+        return walls;
+    }
+
+    public static Player getPlayer1() {
+        return player1;
     }
 }
 
