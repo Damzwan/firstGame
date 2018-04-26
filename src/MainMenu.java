@@ -12,7 +12,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//TODO fix background music options --> it should stay off if put off after returning to tutorial
 public class MainMenu extends BasicGameState {
 
     private Image map;
@@ -32,7 +32,7 @@ public class MainMenu extends BasicGameState {
         outOfMap.add(new Line(0, 0, Application.WIDTH, 0));
         outOfMap.add(new Line(0, Application.HEIGHT, Application.WIDTH, Application.HEIGHT));
         outOfMap.add(new Line(Application.WIDTH, 0, Application.WIDTH, Application.HEIGHT));
-        backgroundMusic = new Music("items/music/background.ogg");
+        backgroundMusic = new Music("music/background.ogg");
         backgroundMusic.loop(1.0f, 0.5f);
         map = new Image("images/mainMenu.png");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF,java.awt.Font.BOLD , 50), false);
@@ -64,21 +64,11 @@ public class MainMenu extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int _delta) throws SlickException {
         if (gc.getInput().isKeyPressed(Input.KEY_O)) sbg.enterState(2, new FadeOutTransition(), new FadeInTransition());
         if (gc.getInput().isKeyPressed(Input.KEY_T)){
-            Tutorial.reset(sbg);
             sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
             backgroundMusic.pause();
+            //TODO fix with world1 music instead
+            Tutorial.music.loop(1f, 0.3f);
         }
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) gc.exit();
     }
-
-    public static boolean collidesWithWall(){
-        for (Shape shape: Tutorial.getTutorialWalls()){
-            if (shape.intersects(Tutorial.getPlayer1().getHitBox())) return true;
-        }
-        return false;
-    }
-
-
-
-
 }

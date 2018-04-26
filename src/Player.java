@@ -10,12 +10,15 @@ import sun.applet.Main;
 import java.io.IOException;
 
 public class Player extends Living {
+    private World world;
     private int health, energyPoints;
     private static Image player, dot;
     private Point dotLocation;
     private float angle;
     private static Audio blink;
     int invincibility = -1;
+    int runEnergy = 100;
+    float runEnergyCounter = 0;
 
     static {
         try {
@@ -27,7 +30,8 @@ public class Player extends Living {
         }
     }
 
-    public Player(Point location, float speed) throws SlickException, IOException {
+    public Player(Point location, float speed, World world) throws SlickException, IOException {
+        this.world = world;
         setHealth(100);
         setEnergyPoints(5);
         setLocation(location);
@@ -47,8 +51,7 @@ public class Player extends Living {
     }
 
     /**
-     * Move the player in given direction
-     * If E is pressed the player moves faster
+     * Move the player in a given direction
      */
     public void move(GameContainer gc) {
 
@@ -58,49 +61,38 @@ public class Player extends Living {
         int dy = 0;
 
         if (gc.getInput().isKeyDown(Input.KEY_W)) {
-            dy = -1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + 96 / 2, (getY() - getHitBox().getBoundingCircleRadius() + 75 / 2)))) dy = -1;
         }
         if (gc.getInput().isKeyDown(Input.KEY_S)) {
-            dy = 1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + 96/2, getY() + getHitBox().getBoundingCircleRadius() + 75/2))) dy = 1;
+
         }
         if (gc.getInput().isKeyDown(Input.KEY_A)) {
-            dx = -1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() - getHitBox().getBoundingCircleRadius() + 96/2, getY() + 75/2))) dx = -1;
         }
         if (gc.getInput().isKeyDown(Input.KEY_D)) {
-            dx = 1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + getHitBox().getBoundingCircleRadius() + 96/2, getY() + 75/2))) dx = 1;
         }
 
         Point next = new Point(getX() + dx*getSpeed(), getY() + dy*getSpeed());
         setLocation(next);
-        //todo wurlt
-
-
-        /*if (gc.getInput().isKeyDown(Input.KEY_W)) {
-            if (MainMenu.outOfMap.get(1).intersects(getHitBox())) return;
-            setLocation(new Point(getX(), getY() - getSpeed()));
-        }
-
-        if (gc.getInput().isKeyDown(Input.KEY_S)) {
-            if (MainMenu.outOfMap.get(2).intersects(getHitBox())) return;
-            setLocation(new Point(getX(), getY() + getSpeed()));
-        }
-
-        if (gc.getInput().isKeyDown(Input.KEY_A)) {
-            if (MainMenu.outOfMap.get(0).intersects(getHitBox())) return;
-            setLocation(new Point(getX() - getSpeed(), getY()));
-        }
-
-        if (gc.getInput().isKeyDown(Input.KEY_D)) {
-            if (MainMenu.outOfMap.get(3).intersects(getHitBox())) return;
-            setLocation(new Point(getX() + getSpeed(), getY()));
-        }*/
     }
 
-
+    /**
+     * Increase the speed when E is pressed
+     */
     public void sprint(GameContainer gc) {
-        if (gc.getInput().isKeyDown(Input.KEY_E)) {
+        if (gc.getInput().isKeyDown(Input.KEY_E) && runEnergy > 0) {
             setSpeed(3);
-        } else setSpeed(2);
+            runEnergy--;
+        } else {
+            setSpeed(2);
+            if (runEnergy < 100) runEnergyCounter += 0.1;
+            if (runEnergyCounter >= 1){
+                runEnergyCounter = 0;
+                runEnergy++;
+            }
+        }
     }
 
     /**
@@ -120,19 +112,21 @@ public class Player extends Living {
      * Teleport the player to a given location
      * if the distance is too far, the player will be teleported to the maximum distance in the given direction
      */
+    //TODO fix teleport
     public void teleport(GameContainer gc) {
         if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
             if (getEnergyPoints() <= 0) return;
             double distance = getDistance(getX(), getMousePosX(), getY(), getMousePosY(gc));
             if (distance >= 200) {
-                float x = getX() + (float) (200 * Math.cos(Math.toRadians(getAngle()))) - 106 / 3;
-                float y = getY() + (float) (200 * Math.sin(Math.toRadians(getAngle()))) - 112 / 3;
-                //if (MainMenu.isOutOfMap(new Point(x, y))) return;
+                float x = getX() + (float) (200 * Math.cos(Math.toRadians(getAngle()))) - 96/2;
+                float y = getY() + (float) (200 * Math.sin(Math.toRadians(getAngle()))) - 75 / 2;
+                if(world.isInWall(new Point(x, y))) return;
                 setLocation(new Point(x, y));
                 setEnergyPoints(getEnergyPoints() - 1);
             } else {
                 float x = getMousePosX() - 106 / 3;
                 float y = getMousePosY(gc) - 112 / 3;
+                if (world.isInWall(new Point(x, y))) return;
                 setLocation(new Point(x, y));
                 setEnergyPoints(getEnergyPoints() - 1);
             }
@@ -213,5 +207,17 @@ public class Player extends Living {
 
     public int getMousePosY(GameContainer gc) {
         return gc.getInput().getMouseY();
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public int getRunEnergy() {
+        return runEnergy;
     }
 }
