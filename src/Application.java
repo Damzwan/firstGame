@@ -21,6 +21,7 @@ public class Application extends StateBasedGame {
         this.addState(new MainMenu());
         this.addState(new Tutorial());
         this.addState(new Options());
+        this.addState(new WorldMenu());
     }
 
     public static void main(String[] args) {

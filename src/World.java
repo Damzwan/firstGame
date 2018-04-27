@@ -1,11 +1,10 @@
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
-import sun.applet.Main;
+
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class World {
         player.setWorld(this);
         this.obstacles = obstacles;
         this.end = end;
-        walls.add(new Rectangle(610, 0, Application.WIDTH - 610, 750));
+        walls.add(new Rectangle(Application.WIDTH, 0, 200, Application.HEIGHT));
         walls.add(new Rectangle(0, -200, Application.WIDTH, 200));
         walls.add(new Rectangle(0, Application.HEIGHT, Application.WIDTH, 200));
         walls.add(new Rectangle(-200, 0, 200, Application.HEIGHT));
@@ -35,9 +34,10 @@ public class World {
 
     public void reset(StateBasedGame sbg) {
         sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
-        getPlayer().setHealth(2);
-        getPlayer().setEnergyPoints(5);
+        getPlayer().setHealth(getPlayer().getOriginalHealth());
+        getPlayer().setTeleports(getPlayer().getOriginalTeleport());
         getPlayer().setLocation(new Point(10, 10));
+        getPlayer().setRunEnergy(100);
     }
 
     public boolean collidesWithWall(){

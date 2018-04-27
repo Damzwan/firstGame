@@ -66,8 +66,10 @@ public class MainMenu extends BasicGameState {
         if (gc.getInput().isKeyPressed(Input.KEY_T)){
             sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
             backgroundMusic.pause();
-            //TODO fix with world1 music instead
-            Tutorial.music.loop(1f, 0.3f);
+            Tutorial.music.loop(1f, 0.1f);
+        }
+        if (gc.getInput().isKeyPressed(Input.KEY_P)){
+            sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
         }
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) gc.exit();
     }

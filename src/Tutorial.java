@@ -1,13 +1,10 @@
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
-import sun.applet.Main;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,12 +28,11 @@ public class Tutorial extends BasicGameState {
         map = new Image("images/mainMenu.png");
         music = new Music("music/World1.ogg");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 40), false);
-
-
         List<List<Zombie>> obstacles = new ArrayList<>();
-        List<Shape> walls = new ArrayList<>();
-        walls.add(new Rectangle(Application.WIDTH, 0, 200, Application.HEIGHT));
 
+        List<Shape> walls = new ArrayList<>();
+        walls.add(new Rectangle(610, 0, Application.WIDTH - 610, 750));
+        walls.add(new Rectangle(110, 750, 800, 200));
 
         //Create the amount of obstacles
         for (int i = 0; i < 4; i++) {
@@ -60,19 +56,20 @@ public class Tutorial extends BasicGameState {
         }
 
         //third obstacle initialization
-        Zombie zombie25 = new Zombie(new Point(560, 750), 4);
-        Zombie zombie26 = new Zombie(new Point(510, 800), 3);
-        Zombie zombie27 = new Zombie(new Point(460, 850), 2);
+        int y_pos3 = 950;
+        for (int i = 0; i < 2; i++) {
+            addZombie(obstacles.get(2), new Zombie(new Point(650, y_pos3), 2));
+            y_pos3 += 60;
+        }
+        y_pos3 = 950;
+        for (int i = 0; i < 2; i++) {
+            addZombie(obstacles.get(2), new Zombie(new Point(850, y_pos3), 2));
+            y_pos3 += 60;
+        }
 
-        Zombie zombie28 = new Zombie(new Point(10, 750), 4);
-        Zombie zombie29 = new Zombie(new Point(60, 800), 3);
-        Zombie zombie30 = new Zombie(new Point(110, 850), 2);
-
-        Zombie zombie31 = new Zombie(new Point(610, 750), 4);
-        addZombie(obstacles.get(2), zombie25, zombie26, zombie27, zombie28, zombie29, zombie30, zombie31);
 
         //fourth obstacle initialization
-        int x_pos = 860;
+        int x_pos = 980;
         int y_pos = 750;
         float speed = 3;
         for (int i = 0; i < 11; i++) {
@@ -82,7 +79,7 @@ public class Tutorial extends BasicGameState {
         }
 
         try {
-            world = new World(walls, new Player(new Point(10, 10), 2, world), obstacles, new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64));
+            world = new World(walls, new Player(new Point(10, 10), 2, 8, 2, world), obstacles, new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,8 +90,9 @@ public class Tutorial extends BasicGameState {
         //draw map and set font
         map.draw();
         g.setFont(font);
-        g.setColor(Color.red);
 
+        //draw the walls
+        g.setColor(Color.red);
         for (Shape wall : world.getWalls()) {
             g.draw(wall);
         }
@@ -122,11 +120,11 @@ public class Tutorial extends BasicGameState {
         g.setColor(Color.white);
         g.drawString("Welcome to zombie escape!", 620, 0);
         g.drawString("The objective of this game is to avoid getting hit by the zombies", 620, 50);
-        g.drawString("and to reach your end destination(blue mark).", 620, 100);
+        g.drawString("and to reach your end destination(blue mark)", 620, 100);
         g.drawString("You can move by using the movement buttons(W, S, A, D)", 620, 200);
         g.drawString("By holding down 'E' you can move a little bit faster!", 620, 250);
-        g.drawString("The other way you can move around is by using spooky teleportation!", 620, 300);
-        g.drawString("You can teleport by using the left mouse button.", 620, 350);
+        g.drawString("The other way you can move around is by using teleportation!", 620, 300);
+        g.drawString("You can teleport by using the left mouse button", 620, 350);
         g.drawString("You can see your", 620, 400);
         g.setColor(Color.green);
         g.drawString("Health", 915, 400);
@@ -136,21 +134,26 @@ public class Tutorial extends BasicGameState {
         g.setColor(Color.orange);
         g.drawString("Energy", 990, 450);
         g.setColor(Color.white);
-        g.drawString("at the same place", 1120, 450);
-        g.drawString("Energy means the amount of times you can teleport around.", 620, 550);
-        g.drawString("Teleportation has a maximum distance that is being shown by the red dot.", 620, 600);
+        g.drawString("and amount of", 1120, 450);
+        g.setColor(Color.red);
+        g.drawString("Teleports", 1370, 450);
+        g.setColor(Color.white);
+        g.drawString("at the same place", 1540, 450);
+        g.drawString("Energy means the amount of time you can sprint", 620, 550);
+        g.drawString("Teleportation has a maximum distance that is being shown by the red dot", 620, 600);
         g.drawString("Try to clear this level. You only get to see the hitboxes for this tutorial!", 620, 650);
-        g.drawString("Good Luck! Also do not touch the Red rectangle and press 'R' to reset", 620, 700);
+        g.drawString("Good Luck! Press R if you would like to restart!", 620, 700);
 
         //Health and energy
         String health = "Health: " + String.valueOf(world.getPlayer().getHealth());
         g.setColor(Color.green);
-        g.drawString(health, 20, Application.HEIGHT - 125);
+        g.drawString(health, 20, Application.HEIGHT - 165);
+        g.setColor(Color.red);
+        String energy = "Teleports: " + String.valueOf(world.getPlayer().getTeleports());
+        g.drawString(energy, 20, Application.HEIGHT - 115);
         g.setColor(Color.orange);
-        String energy = "Energy: " + String.valueOf(world.getPlayer().getEnergyPoints());
-        g.drawString(energy, 20, Application.HEIGHT - 75);
-        String runEnergy = "Run Energy: " + String.valueOf(world.getPlayer().getRunEnergy());
-        g.drawString(runEnergy, 20, Application.HEIGHT - 200);
+        String runEnergy = "Energy: " + String.valueOf(world.getPlayer().getRunEnergy());
+        g.drawString(runEnergy, 20, Application.HEIGHT - 65);
 
 
     }
@@ -168,14 +171,6 @@ public class Tutorial extends BasicGameState {
 //        if (player1.getHitBox().intersects(outOfBound)) reset(sbg);
         world.getPlayer().setup(gc);
         if (world.getPlayer().getHealth() <= 0) world.reset(sbg);
-
-        //If out of map
-        //for (Shape wall : walls) {
-            //if (wall.intersects(player1.getHitBox())) {
-                //reset(sbg);
-            //}
-        //}
-
 
         //zombie setup
 
@@ -197,38 +192,15 @@ public class Tutorial extends BasicGameState {
         }
 
         //third obstacle
-        int x_3 = 10;
-        int y_3 = Application.HEIGHT - 65;
-
-        for (int i = 0; i < 3; i++) {
-            Point originalPosition = new Point(560, 750);
+        for (int i = 0; i < 2; i++) {
             Zombie currZombie = world.getObstacles().get(2).get(i);
-            Point currZombieLoc1 = currZombie.getOriginalPosition();
-            Point currZombieLoc2 = new Point(x_3, originalPosition.getY());
-            Point currZombieLoc3 = new Point(x_3, y_3);
-            Point currZombieLoc4 = new Point(originalPosition.getX(), y_3);
-            currZombie.moveSquaredStartRightLeft(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4);
-            x_3 += 50;
-            y_3 -= 50;
+            currZombie.moveHorizontal(new Point(100, currZombie.getOriginalY()), currZombie.getOriginalPosition());
         }
 
-        int x_4 = 10;
-        int y_4 = Application.HEIGHT - 65;
-        for (int i = 3; i < 6; i++) {
+        for (int i = 2; i < 4; i++) {
             Zombie currZombie = world.getObstacles().get(2).get(i);
-            Point currZombieLoc1 = new Point(x_4, world.getObstacles().get(2).get(i - 3).getOriginalY());
-            Point currZombieLoc2 = world.getObstacles().get(2).get(i - 3).getOriginalPosition();
-            Point currZombieLoc3 = new Point(world.getObstacles().get(0).get(i - 3).getOriginalX(), y_4);
-            Point currZombieLoc4 = new Point(x_4, y_4);
-            currZombie.moveSquaredStartLeftRight(currZombieLoc1, currZombieLoc2, currZombieLoc3, currZombieLoc4);
-            x_4 += 50;
-            y_4 -= 50;
+            currZombie.moveHorizontal(new Point(300, currZombie.getOriginalY()), currZombie.getOriginalPosition());
         }
-
-        Zombie _3zombie7 = world.getObstacles().get(2).get(6);
-        Point _3zombie7Loc1 = _3zombie7.getOriginalPosition();
-        Point _3zombie7Loc2 = new Point(_3zombie7Loc1.getX(), Application.HEIGHT - 65);
-        _3zombie7.moveVertical(_3zombie7Loc1, _3zombie7Loc2);
 
         //fourth obstacle
         for (Zombie currZombie : world.getObstacles().get(3)) {
@@ -239,9 +211,9 @@ public class Tutorial extends BasicGameState {
         Zombie last = world.getObstacles().get(3).get(world.getObstacles().get(3).size() - 1);
         Zombie secondLast = world.getObstacles().get(3).get(world.getObstacles().get(3).size() - 2);
         if (last.condition == secondLast.condition){
-            System.out.println(Math.abs(last.getY() - secondLast.getY()));
-            System.out.println("Speed Last:" +  last.getSpeed());
-            System.out.println("speed secondLast: " + secondLast.getSpeed());
+            //System.out.println(Math.abs(last.getY() - secondLast.getY()));
+//            System.out.println("Speed Last:" +  last.getSpeed());
+//            System.out.println("speed secondLast: " + secondLast.getSpeed());
         }
 
     }
