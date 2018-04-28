@@ -6,6 +6,10 @@ public class Point {
         this.x = x;
         this.y = y;
     }
+    
+    public Point interpolate(Point other, float t) {
+        return new Point(t * x + (1 - t) *other.x, t * y + (1 - t) *other.y);
+    }
 
     public float getX() {
         return x;
@@ -21,5 +25,10 @@ public class Point {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
     }
 }

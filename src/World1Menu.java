@@ -6,33 +6,33 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-public class WorldMenu extends BasicGameState {
+public class World1Menu extends BasicGameState {
     private Image map;
     private Font font;
-    private List<String> worlds = new ArrayList<>();
+    private List<String> levels = new ArrayList<>();
 
     @Override
     public int getID() {
-        return 3;
+        return 4;
     }
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         map = new Image("images/mainMenu.png");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 50), false);
-        String world1 = "World 1(1)";
-        String world2 = "World 2(2)";
-        String world3 = "World 3(3)";
-        String world4 = "World 4(4)";
-        String world5 = "World 5(5)";
-        String world6 = "World 6(6)";
-        String world7 = "World 7(7)";
-        String world8 = "World 8(8)";
-        String world9 = "World 9(9)";
-        addWorld(world1, world2, world3, world4, world5, world6, world7, world8, world9);
+
+        String level1 = "level 1(1)";
+        String level2 = "level 2(2)";
+        String level3 = "level 3(3)";
+        String level4 = "level 4(4)";
+        String level5 = "level 5(5)";
+        String level6 = "level 6(6)";
+        String level7 = "level 7(7)";
+        String level8 = "level 8(8)";
+        String level9 = "level 9(9)";
+        addLevel(level1, level2, level3, level4, level5, level6, level7, level8, level9);
     }
 
     @Override
@@ -40,22 +40,24 @@ public class WorldMenu extends BasicGameState {
         map.draw();
         g.setFont(font);
         int y = 100;
-        for (String currString : worlds) {
+        for (String currString : levels) {
             g.drawString(currString, Application.WIDTH / 2 - (font.getWidth(currString) / 2), y);
             y += 100;
         }
-
-
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
-            sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
-        if (gc.getInput().isKeyPressed(Input.KEY_1)) sbg.enterState(4, new FadeOutTransition(), new FadeInTransition());
+            sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
+        if (gc.getInput().isKeyPressed(Input.KEY_1)) {
+            sbg.enterState(5, new FadeOutTransition(), new FadeInTransition());
+            Tutorial.music.loop(1f, 0.1f);
+        }
+
     }
 
-    public void addWorld(String... strings) {
-        worlds.addAll(Arrays.asList(strings));
+    public void addLevel(String... strings) {
+        levels.addAll(Arrays.asList(strings));
     }
 }

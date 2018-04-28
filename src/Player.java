@@ -12,9 +12,9 @@ public class Player extends Living {
     private int health, teleports, originalHealth, originalTeleport;
     private static Image player, dot;
     private Point dotLocation;
-    private float angle;
+    private float angle, originalSpeed;
     private static Audio blink;
-    int invincibility = -1;
+    private int invincibility = -1;
     private int runEnergy = 100;
     float runEnergyCounter = 0;
 
@@ -32,6 +32,7 @@ public class Player extends Living {
         this.world = world;
         originalHealth = health;
         originalTeleport = teleports;
+        setOriginalSpeed(speed);
         setHealth(health);
         setTeleports(teleports);
         setLocation(location);
@@ -62,20 +63,24 @@ public class Player extends Living {
         int dy = 0;
 
         if (gc.getInput().isKeyDown(Input.KEY_W)) {
-            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + 96 / 2, (getY() - getHitBox().getBoundingCircleRadius() + 75 / 2)))) dy = -1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + 96 / 2, (getY() - getHitBox().getBoundingCircleRadius() + 75 / 2))))
+                dy = -1;
         }
         if (gc.getInput().isKeyDown(Input.KEY_S)) {
-            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + 96/2, getY() + getHitBox().getBoundingCircleRadius() + 75/2))) dy = 1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + 96 / 2, getY() + getHitBox().getBoundingCircleRadius() + 75 / 2)))
+                dy = 1;
 
         }
         if (gc.getInput().isKeyDown(Input.KEY_A)) {
-            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() - getHitBox().getBoundingCircleRadius() + 96/2, getY() + 75/2))) dx = -1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() - getHitBox().getBoundingCircleRadius() + 96 / 2, getY() + 75 / 2)))
+                dx = -1;
         }
         if (gc.getInput().isKeyDown(Input.KEY_D)) {
-            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + getHitBox().getBoundingCircleRadius() + 96/2, getY() + 75/2))) dx = 1;
+            if (!world.collidesWithWall() || !world.isInWall(new Point(getX() + getHitBox().getBoundingCircleRadius() + 96 / 2, getY() + 75 / 2)))
+                dx = 1;
         }
 
-        Point next = new Point(getX() + dx*getSpeed(), getY() + dy*getSpeed());
+        Point next = new Point(getX() + dx * getSpeed(), getY() + dy * getSpeed());
         setLocation(next);
     }
 
@@ -84,12 +89,12 @@ public class Player extends Living {
      */
     public void sprint(GameContainer gc) {
         if (gc.getInput().isKeyDown(Input.KEY_E) && runEnergy > 0) {
-            setSpeed(3);
+            setSpeed(getOriginalSpeed() + 2);
             runEnergy--;
         } else {
-            setSpeed(2);
+            setSpeed(getOriginalSpeed());
             if (runEnergy < 100) runEnergyCounter += 0.1;
-            if (runEnergyCounter >= 1){
+            if (runEnergyCounter >= 1) {
                 runEnergyCounter = 0;
                 runEnergy++;
             }
@@ -102,8 +107,8 @@ public class Player extends Living {
     public void rotateChar(GameContainer gc) {
         float mouseX = gc.getInput().getMouseX();
         float mouseY = gc.getInput().getMouseY();
-        float xDistance = mouseX - (getX() + 96/2);
-        float yDistance = mouseY - (getY() + 75/2);
+        float xDistance = mouseX - (getX() + 96 / 2);
+        float yDistance = mouseY - (getY() + 75 / 2);
         double angle = Math.toDegrees(Math.atan2(yDistance, xDistance));
         setAngle((float) angle);
         player.setRotation((float) angle);
@@ -121,29 +126,20 @@ public class Player extends Living {
             if (getTeleports() <= 0) return;
             double distance = getDistance(getX(), getMousePosX(), getY(), getMousePosY(gc));
             if (distance >= 200) {
-                 x = getX() + (float) (200 * Math.cos(Math.toRadians(getAngle())));
-                 y = getY() + (float) (200 * Math.sin(Math.toRadians(getAngle())));
+                x = getX() + (float) (200 * Math.cos(Math.toRadians(getAngle())));
+                y = getY() + (float) (200 * Math.sin(Math.toRadians(getAngle())));
             } else {
-                 x = getMousePosX() - 106 / 3;
-                 y = getMousePosY(gc) - 112 / 3;
+                x = getMousePosX() - 106 / 3;
+                y = getMousePosY(gc) - 112 / 3;
             }
-            if (world.isInWall(new Point(x + 96/2 + getHitBox().getBoundingCircleRadius(), y + 75/2 + getHitBox().getBoundingCircleRadius()))
-                    || world.isInWall(new Point(x + 96/2 - getHitBox().getBoundingCircleRadius(), y + 75/2 - getHitBox().getBoundingCircleRadius()))
-                    || world.isInWall(new Point(x + 96/2 + getHitBox().getBoundingCircleRadius(), y + 75/2 - getHitBox().getBoundingCircleRadius()))
-                    || world.isInWall(new Point(x + 96/2 - getHitBox().getBoundingCircleRadius(), y + 75/2 + getHitBox().getBoundingCircleRadius()))) return;
+            if (world.isInWall(new Point(x + 96 / 2 + getHitBox().getBoundingCircleRadius(), y + 75 / 2 + getHitBox().getBoundingCircleRadius()))
+                    || world.isInWall(new Point(x + 96 / 2 - getHitBox().getBoundingCircleRadius(), y + 75 / 2 - getHitBox().getBoundingCircleRadius()))
+                    || world.isInWall(new Point(x + 96 / 2 + getHitBox().getBoundingCircleRadius(), y + 75 / 2 - getHitBox().getBoundingCircleRadius()))
+                    || world.isInWall(new Point(x + 96 / 2 - getHitBox().getBoundingCircleRadius(), y + 75 / 2 + getHitBox().getBoundingCircleRadius())))
+                return;
             setLocation(new Point(x, y));
             setTeleports(getTeleports() - 1);
             blink.playAsSoundEffect(1, 0.50f, false);
-        }
-    }
-
-    public void getDamage(Shape enemyHitBox) {
-        if (getHitBox().intersects(enemyHitBox)) {
-            if (invincibility < 0) {
-                //damage.play();
-                invincibility = 120;
-                health -= 1;
-            }
         }
     }
 
@@ -197,8 +193,8 @@ public class Player extends Living {
 
     public void setDotLocation() {
 
-        this.dotLocation = new Point(getX() + 96/2 - 25 + (float) (200 * Math.cos(Math.toRadians(getAngle()))),
-                getY() + 75/2 - 17 + (float) (200 * Math.sin(Math.toRadians(getAngle()))));
+        this.dotLocation = new Point(getX() + 96 / 2 - 25 + (float) (200 * Math.cos(Math.toRadians(getAngle()))),
+                getY() + 75 / 2 - 17 + (float) (200 * Math.sin(Math.toRadians(getAngle()))));
     }
 
     public double getDistance(float X1, float X2, float Y1, float Y2) {
@@ -235,5 +231,21 @@ public class Player extends Living {
 
     public int getOriginalTeleport() {
         return originalTeleport;
+    }
+
+    public int getInvincibility() {
+        return invincibility;
+    }
+
+    public void setInvincibility(int invincibility) {
+        this.invincibility = invincibility;
+    }
+
+    public float getOriginalSpeed() {
+        return originalSpeed;
+    }
+
+    public void setOriginalSpeed(float originalSpeed) {
+        this.originalSpeed = originalSpeed;
     }
 }

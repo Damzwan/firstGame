@@ -12,6 +12,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import java.util.ArrayList;
 import java.util.List;
+
 //TODO fix background music options --> it should stay off if put off after returning to tutorial
 public class MainMenu extends BasicGameState {
 
@@ -35,7 +36,7 @@ public class MainMenu extends BasicGameState {
         backgroundMusic = new Music("music/background.ogg");
         backgroundMusic.loop(1.0f, 0.5f);
         map = new Image("images/mainMenu.png");
-        font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF,java.awt.Font.BOLD , 50), false);
+        font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 50), false);
     }
 
     @Override
@@ -51,24 +52,24 @@ public class MainMenu extends BasicGameState {
         //render the strings
         g.setColor(Color.white);
         String play = "Play Game(P)";
-        g.drawString(play, Application.WIDTH/2 - (font.getWidth(play)/2), Application.HEIGHT/2 - font.getHeight(play) - 200);
+        g.drawString(play, Application.WIDTH / 2 - (font.getWidth(play) / 2), Application.HEIGHT / 2 - font.getHeight(play) - 200);
         String tutorial = "Tutorial(T)";
-        g.drawString(tutorial, Application.WIDTH/2 - (font.getWidth(play)/2), Application.HEIGHT/2 - font.getHeight(play) - 100);
+        g.drawString(tutorial, Application.WIDTH / 2 - (font.getWidth(play) / 2), Application.HEIGHT / 2 - font.getHeight(play) - 100);
         String options = "Options(O)";
-        g.drawString(options, Application.WIDTH/2 - (font.getWidth(play)/2), Application.HEIGHT/2 - font.getHeight(play));
+        g.drawString(options, Application.WIDTH / 2 - (font.getWidth(play) / 2), Application.HEIGHT / 2 - font.getHeight(play));
         String exit = "Exit(esc)";
-        g.drawString(exit, Application.WIDTH/2 - (font.getWidth(play)/2), Application.HEIGHT/2 - font.getHeight(play) + 100);
+        g.drawString(exit, Application.WIDTH / 2 - (font.getWidth(play) / 2), Application.HEIGHT / 2 - font.getHeight(play) + 100);
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int _delta) throws SlickException {
         if (gc.getInput().isKeyPressed(Input.KEY_O)) sbg.enterState(2, new FadeOutTransition(), new FadeInTransition());
-        if (gc.getInput().isKeyPressed(Input.KEY_T)){
+        if (gc.getInput().isKeyPressed(Input.KEY_T)) {
             sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
             backgroundMusic.pause();
             Tutorial.music.loop(1f, 0.1f);
         }
-        if (gc.getInput().isKeyPressed(Input.KEY_P)){
+        if (gc.getInput().isKeyPressed(Input.KEY_P)) {
             sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
         }
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) gc.exit();

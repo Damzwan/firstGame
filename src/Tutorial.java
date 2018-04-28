@@ -5,7 +5,6 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +33,16 @@ public class Tutorial extends BasicGameState {
         walls.add(new Rectangle(610, 0, Application.WIDTH - 610, 750));
         walls.add(new Rectangle(110, 750, 800, 200));
 
+        try {
+            world = new World(
+                    walls,
+                    new Player(new Point(10, 10), 2, 8, 2, world), obstacles,
+                    new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64)
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         //Create the amount of obstacles
         for (int i = 0; i < 4; i++) {
             obstacles.add(new ArrayList<>());
@@ -43,7 +52,7 @@ public class Tutorial extends BasicGameState {
         int x_pos1 = 10;
         int y_pos1 = 350;
         for (int i = 0; i < 12; i++) {
-            addZombie(obstacles.get(0), new Zombie(new Point(x_pos1, y_pos1), 2));
+            addZombie(obstacles.get(0), new Zombie(world, new Point(x_pos1, y_pos1), 2));
             x_pos1 += 50;
         }
 
@@ -51,42 +60,36 @@ public class Tutorial extends BasicGameState {
         int x_pos2 = 10;
         int y_pos2 = 700;
         for (int i = 0; i < 12; i++) {
-            addZombie(obstacles.get(1), new Zombie(new Point(x_pos2, y_pos2), 2));
+            addZombie(obstacles.get(1), new Zombie(world, new Point(x_pos2, y_pos2), 2));
             x_pos2 += 50;
         }
 
         //third obstacle initialization
         int y_pos3 = 950;
         for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(new Point(650, y_pos3), 2));
+            addZombie(obstacles.get(2), new Zombie(world, new Point(650, y_pos3), 2));
             y_pos3 += 60;
         }
         y_pos3 = 950;
         for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(new Point(850, y_pos3), 2));
+            addZombie(obstacles.get(2), new Zombie(world, new Point(850, y_pos3), 2));
             y_pos3 += 60;
         }
-
 
         //fourth obstacle initialization
         int x_pos = 980;
         int y_pos = 750;
         float speed = 3;
-        for (int i = 0; i < 11; i++) {
-            addZombie(obstacles.get(3), new Zombie(new Point(x_pos, y_pos), speed));
+        for (int i = 0; i < 12; i++) {
+            addZombie(obstacles.get(3), new Zombie(world, new Point(x_pos, y_pos), speed));
             x_pos += 60;
             y_pos += 25;
-        }
-
-        try {
-            world = new World(walls, new Player(new Point(10, 10), 2, 8, 2, world), obstacles, new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+        world.tick();
         //draw map and set font
         map.draw();
         g.setFont(font);
@@ -160,35 +163,17 @@ public class Tutorial extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int _delta) throws SlickException {
-        //end the game if target at blue location
-        if (world.getPlayer().getHitBox().intersects(world.getEnd())) world.endGame(sbg);
-
-        //inputs
-        if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) world.endGame(sbg);
-        if (gc.getInput().isKeyPressed(Input.KEY_R)) world.reset(sbg);
-
-        //player setup
-//        if (player1.getHitBox().intersects(outOfBound)) reset(sbg);
-        world.getPlayer().setup(gc);
-        if (world.getPlayer().getHealth() <= 0) world.reset(sbg);
-
+        world.basicInputSetup(gc, sbg, getID());
         //zombie setup
-
-        //set hitbox damage for all zombies
-        for (List<Zombie> currList : world.getObstacles()) {
-            for (Zombie currZombie : currList) {
-                world.getPlayer().getDamage(currZombie.getHitBox());
-            }
-        }
 
         //first obstacle
         for (Zombie currZombie : world.getObstacles().get(0)) {
-            currZombie.stand();
+            currZombie.stand(Zombie.zombieMoveDown);
         }
 
         //second obstacle
         for (Zombie currZombie : world.getObstacles().get(1)) {
-            currZombie.stand();
+            currZombie.stand(Zombie.zombieMoveDown);
         }
 
         //third obstacle
@@ -203,20 +188,14 @@ public class Tutorial extends BasicGameState {
         }
 
         //fourth obstacle
+        float offset = 0;
         for (Zombie currZombie : world.getObstacles().get(3)) {
-            currZombie.moveVertical(new Point(860, 750),
-                    new Point(860, Application.HEIGHT - 65));
+            currZombie.updateLinearMove(new Point(currZombie.getX(), 750),
+                    new Point(currZombie.getX(), Application.HEIGHT - 65), 100, offset += 90f / world.getObstacles().get(3).size(), Direction.vertical, StartDirection.up);
         }
-
-        Zombie last = world.getObstacles().get(3).get(world.getObstacles().get(3).size() - 1);
-        Zombie secondLast = world.getObstacles().get(3).get(world.getObstacles().get(3).size() - 2);
-        if (last.condition == secondLast.condition){
-            //System.out.println(Math.abs(last.getY() - secondLast.getY()));
-//            System.out.println("Speed Last:" +  last.getSpeed());
-//            System.out.println("speed secondLast: " + secondLast.getSpeed());
-        }
-
     }
+
+    int i = 0;
 
     public void addZombie(List<Zombie> lst, Zombie... zombies) {
         lst.addAll(Arrays.asList(zombies));

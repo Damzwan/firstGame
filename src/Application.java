@@ -5,9 +5,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Application extends StateBasedGame {
 
-    public static final int WIDTH   = 1920;
-    public static final int HEIGHT  = 1080;
-    private static final int FPS     = 120;
+    public static final int WIDTH = 1920;
+    public static final int HEIGHT = 1080;
+    private static final int FPS = 120;
     private static final double VERSION = 1.0;
     private static AppGameContainer app;
 
@@ -22,6 +22,8 @@ public class Application extends StateBasedGame {
         this.addState(new Tutorial());
         this.addState(new Options());
         this.addState(new WorldMenu());
+        this.addState(new World1Menu());
+        this.addState(new Level1());
     }
 
     public static void main(String[] args) {
@@ -40,11 +42,11 @@ public class Application extends StateBasedGame {
         app.setDisplayMode(WIDTH, HEIGHT, isFullScreen);
     }
 
-    public static void setShowFPS(boolean isFps){
+    public static void setShowFPS(boolean isFps) {
         app.setShowFPS(isFps);
     }
 
-    public static void setVSync(boolean isVSync){
+    public static void setVSync(boolean isVSync) {
         app.setVSync(isVSync);
     }
 

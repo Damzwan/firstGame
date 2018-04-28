@@ -9,7 +9,7 @@ public abstract class Living {
         return hitBox;
     }
 
-    public void setHitBox(Shape hitBox){
+    public void setHitBox(Shape hitBox) {
         this.hitBox = hitBox;
     }
 
@@ -22,11 +22,11 @@ public abstract class Living {
         return location;
     }
 
-    public float getX(){
+    public float getX() {
         return getLocation().getX();
     }
 
-    public float getY(){
+    public float getY() {
         return getLocation().getY();
     }
 
