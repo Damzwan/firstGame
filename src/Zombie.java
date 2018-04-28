@@ -21,7 +21,7 @@ public class Zombie extends Living {
         }
     }
 
-    public boolean condition = true; //TODO private
+    private boolean condition = true; //TODO private
     private Point originalPosition;
 
 
@@ -30,8 +30,12 @@ public class Zombie extends Living {
         setOriginalPosition(location);
         this.world = world;
         setSpeed(speed);
-        setHitBox(new Circle(0, 0, 25));
+        setHitBox(new Circle(0, 0, 22));
         setCurrZombieAnimation(zombieMoveRight);
+    }
+
+    public void update(){
+
     }
 
     public void moveHorizontal(Point loc1, Point loc2) {
@@ -40,7 +44,7 @@ public class Zombie extends Living {
             moveLeft();
             condition = getX() < loc1.getX();
         }
-        setHitBoxLocation(new Point(getX() + 30, getY() + 30));
+        setHitBoxLocation(new Point(getX() + 32, getY() + 32));
     }
 
     public void updateLinearMove(Point loc1, Point loc2, float timeLength, float offset, Direction direction, StartDirection startDirection) {
@@ -111,10 +115,9 @@ public class Zombie extends Living {
     }
 
     public void stand(Animation animation) {
-        setHitBoxLocation(new Point(getX() + 30, getY() + 30));
         setCurrZombieAnimation(animation);
-        //getCurrZombieAnimation().stop();
         setLocation(getOriginalPosition());
+        setHitBoxLocation(new Point(getX() + 30, getY() + 30));
     }
 
     private void moveRight() {

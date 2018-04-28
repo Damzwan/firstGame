@@ -58,7 +58,7 @@ public class World {
     }
 
     public void endGame(StateBasedGame sbg, int id) throws SlickException {
-        MainMenu.backgroundMusic.loop(1f, 0.5f);
+        MainMenu.backgroundMusic.loop(1f, 0.4f);
         reset(sbg, id);
         sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
     }
@@ -72,8 +72,8 @@ public class World {
     }
 
     public void getDamage() {
-        for (List<Zombie> zombielst : getObstacles()) {
-            for (Zombie zombie : zombielst) {
+        for (List<Zombie> zombieLst : getObstacles()) {
+            for (Zombie zombie : zombieLst) {
                 if (zombie.getHitBox().intersects(player.getHitBox())) {
                     if (player.getInvincibility() < 0) {
                         //damage.play();

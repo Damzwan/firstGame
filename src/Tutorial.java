@@ -15,7 +15,7 @@ public class Tutorial extends BasicGameState {
     private World world;
     private Image map;
     private TrueTypeFont font;
-    public static Music music;
+    //public static Music music;
 
     @Override
     public int getID() {
@@ -24,8 +24,8 @@ public class Tutorial extends BasicGameState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        map = new Image("images/mainMenu.png");
-        music = new Music("music/World1.ogg");
+        map = new Image("images/tutorial.png");
+        //music = new Music("music/World1.ogg");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 40), false);
         List<List<Zombie>> obstacles = new ArrayList<>();
 
@@ -48,7 +48,7 @@ public class Tutorial extends BasicGameState {
             obstacles.add(new ArrayList<>());
         }
 
-        //first obstacle initialization
+        //first obstacle initialisation
         int x_pos1 = 10;
         int y_pos1 = 350;
         for (int i = 0; i < 12; i++) {
@@ -56,7 +56,7 @@ public class Tutorial extends BasicGameState {
             x_pos1 += 50;
         }
 
-        //second obstacle initialization
+        //second obstacle initialisation
         int x_pos2 = 10;
         int y_pos2 = 700;
         for (int i = 0; i < 12; i++) {
@@ -64,7 +64,7 @@ public class Tutorial extends BasicGameState {
             x_pos2 += 50;
         }
 
-        //third obstacle initialization
+        //third obstacle initialisation
         int y_pos3 = 950;
         for (int i = 0; i < 2; i++) {
             addZombie(obstacles.get(2), new Zombie(world, new Point(650, y_pos3), 2));
@@ -76,7 +76,7 @@ public class Tutorial extends BasicGameState {
             y_pos3 += 60;
         }
 
-        //fourth obstacle initialization
+        //fourth obstacle initialisation
         int x_pos = 980;
         int y_pos = 750;
         float speed = 3;
@@ -114,18 +114,13 @@ public class Tutorial extends BasicGameState {
             }
         }
 
-        //Draw end destination
-        g.setColor(Color.blue);
-        g.draw(world.getEnd());
-        g.fill(world.getEnd());
-
         //Text
         g.setColor(Color.white);
         g.drawString("Welcome to zombie escape!", 620, 0);
         g.drawString("The objective of this game is to avoid getting hit by the zombies", 620, 50);
-        g.drawString("and to reach your end destination(blue mark)", 620, 100);
+        g.drawString("and to reach your end destination(treasure)", 620, 100);
         g.drawString("You can move by using the movement buttons(W, S, A, D)", 620, 200);
-        g.drawString("By holding down 'E' you can move a little bit faster!", 620, 250);
+        g.drawString("By holding down 'Shift' you can move a little bit faster!", 620, 250);
         g.drawString("The other way you can move around is by using teleportation!", 620, 300);
         g.drawString("You can teleport by using the left mouse button", 620, 350);
         g.drawString("You can see your", 620, 400);
@@ -209,11 +204,11 @@ public class Tutorial extends BasicGameState {
         this.world = world;
     }
 
-    public int getPosX() {
+    public int getMousePosX() {
         return Mouse.getX();
     }
 
-    public int getPosY(GameContainer gc) {
+    public int getMousePosY(GameContainer gc) {
         return gc.getInput().getMouseY();
     }
 }

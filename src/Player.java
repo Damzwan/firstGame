@@ -1,7 +1,6 @@
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.SoundStore;
 
@@ -21,7 +20,7 @@ public class Player extends Living {
     static {
         try {
             player = new Image("images/realAssassin.png");
-            dot = new Image("images/dot.png");
+            dot = new Image("images/dotty.png");
             blink = SoundStore.get().getOgg("music/blink.ogg");
         } catch (SlickException | IOException e) {
             e.printStackTrace();
@@ -38,7 +37,7 @@ public class Player extends Living {
         setLocation(location);
         setSpeed(speed);
         setHitBox(new Circle(0,
-                0, 30));
+                0, 25));
         setDotLocation();
     }
 
@@ -88,7 +87,7 @@ public class Player extends Living {
      * Increase the speed when E is pressed
      */
     public void sprint(GameContainer gc) {
-        if (gc.getInput().isKeyDown(Input.KEY_E) && runEnergy > 0) {
+        if (gc.getInput().isKeyDown(Input.KEY_LSHIFT) && runEnergy > 0) {
             setSpeed(getOriginalSpeed() + 2);
             runEnergy--;
         } else {
@@ -193,8 +192,8 @@ public class Player extends Living {
 
     public void setDotLocation() {
 
-        this.dotLocation = new Point(getX() + 96 / 2 - 25 + (float) (200 * Math.cos(Math.toRadians(getAngle()))),
-                getY() + 75 / 2 - 17 + (float) (200 * Math.sin(Math.toRadians(getAngle()))));
+        this.dotLocation = new Point(getX() + 96 / 2 - 5 + (float) (200 * Math.cos(Math.toRadians(getAngle()))),
+                getY() + 75 / 2 - 3.5f + (float) (200 * Math.sin(Math.toRadians(getAngle()))));
     }
 
     public double getDistance(float X1, float X2, float Y1, float Y2) {

@@ -13,7 +13,6 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO fix background music options --> it should stay off if put off after returning to tutorial
 public class MainMenu extends BasicGameState {
 
     private Image map;
@@ -34,7 +33,7 @@ public class MainMenu extends BasicGameState {
         outOfMap.add(new Line(0, Application.HEIGHT, Application.WIDTH, Application.HEIGHT));
         outOfMap.add(new Line(Application.WIDTH, 0, Application.WIDTH, Application.HEIGHT));
         backgroundMusic = new Music("music/background.ogg");
-        backgroundMusic.loop(1.0f, 0.5f);
+        backgroundMusic.loop(1.0f, 0.4f);
         map = new Image("images/mainMenu.png");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 50), false);
     }
@@ -66,8 +65,10 @@ public class MainMenu extends BasicGameState {
         if (gc.getInput().isKeyPressed(Input.KEY_O)) sbg.enterState(2, new FadeOutTransition(), new FadeInTransition());
         if (gc.getInput().isKeyPressed(Input.KEY_T)) {
             sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
-            backgroundMusic.pause();
-            Tutorial.music.loop(1f, 0.1f);
+            //backgroundMusic.pause();
+            backgroundMusic.stop();
+            //new Music("music/World1.ogg").loop(1f, 0.1f);
+            //Tutorial.music.loop(1f, 0.1f);
         }
         if (gc.getInput().isKeyPressed(Input.KEY_P)) {
             sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
