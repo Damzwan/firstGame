@@ -1,19 +1,31 @@
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 
+import java.io.IOException;
 import java.util.List;
 
 public class World {
     private List<Shape> walls;
     private Player player;
+    private static Audio damage;
     private List<List<Zombie>> obstacles;
     private Shape end;
     private long tick = 0;
+
+    static {
+        try {
+            damage = SoundStore.get().getOgg("music/damage.ogg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public World(List<Shape> walls, Player player, List<List<Zombie>> obstacles, Shape end) {
         this.walls = walls;
@@ -58,6 +70,7 @@ public class World {
     }
 
     public void endGame(StateBasedGame sbg, int id) throws SlickException {
+        //Tutorial.music.stop();
         MainMenu.backgroundMusic.loop(1f, 0.4f);
         reset(sbg, id);
         sbg.enterState(0, new FadeOutTransition(), new FadeInTransition());
@@ -76,9 +89,9 @@ public class World {
             for (Zombie zombie : zombieLst) {
                 if (zombie.getHitBox().intersects(player.getHitBox())) {
                     if (player.getInvincibility() < 0) {
-                        //damage.play();
                         player.setInvincibility(120);
                         player.setHealth(player.getHealth() - 1);
+                        damage.playAsSoundEffect(1, 1, false);
                     }
                 }
             }
@@ -93,10 +106,6 @@ public class World {
         //draw map and set font
         map.draw();
         g.setFont(font);
-
-        //render the player
-        getPlayer().getPlayer().draw(getPlayer().getX(), getPlayer().getY());
-        this.getPlayer().getDot().draw(getPlayer().getDotX(), getPlayer().getDotY());
 
         //Draw end destination
         g.setColor(Color.blue);
@@ -114,11 +123,15 @@ public class World {
         String runEnergy = "Energy: " + String.valueOf(getPlayer().getRunEnergy());
         g.drawString(runEnergy, 20, Application.HEIGHT - 65);
 
+        //render the player
+        getPlayer().getPlayer().draw(getPlayer().getX(), getPlayer().getY());
+        this.getPlayer().getDot().draw(getPlayer().getDotX(), getPlayer().getDotY());
+
         //render the zombies
         for (List<Zombie> currList : getObstacles()) {
             for (Zombie currZombie : currList) {
                 currZombie.getCurrZombieAnimation().draw(currZombie.getX(), currZombie.getY());
-                g.draw(currZombie.getHitBox());
+                //g.draw(currZombie.getHitBox());
             }
         }
 

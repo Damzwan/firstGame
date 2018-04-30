@@ -131,14 +131,14 @@ public class Player extends Living {
                 x = getMousePosX() - 106 / 3;
                 y = getMousePosY(gc) - 112 / 3;
             }
-            if (world.isInWall(new Point(x + 96 / 2 + getHitBox().getBoundingCircleRadius(), y + 75 / 2 + getHitBox().getBoundingCircleRadius()))
-                    || world.isInWall(new Point(x + 96 / 2 - getHitBox().getBoundingCircleRadius(), y + 75 / 2 - getHitBox().getBoundingCircleRadius()))
-                    || world.isInWall(new Point(x + 96 / 2 + getHitBox().getBoundingCircleRadius(), y + 75 / 2 - getHitBox().getBoundingCircleRadius()))
-                    || world.isInWall(new Point(x + 96 / 2 - getHitBox().getBoundingCircleRadius(), y + 75 / 2 + getHitBox().getBoundingCircleRadius())))
+            if (world.isInWall(new Point(x + 96 / 2 + (getHitBox().getBoundingCircleRadius()/2), y + 75 / 2 + (getHitBox().getBoundingCircleRadius()/2)))
+                    || world.isInWall(new Point(x + 96 / 2 - (getHitBox().getBoundingCircleRadius()/2), y + 75 / 2 - (getHitBox().getBoundingCircleRadius()/2)))
+                    || world.isInWall(new Point(x + 96 / 2 + (getHitBox().getBoundingCircleRadius()/2), y + 75 / 2 - (getHitBox().getBoundingCircleRadius()/2)))
+                    || world.isInWall(new Point(x + 96 / 2 - (getHitBox().getBoundingCircleRadius()/2), y + 75 / 2 + (getHitBox().getBoundingCircleRadius()/2))))
                 return;
             setLocation(new Point(x, y));
             setTeleports(getTeleports() - 1);
-            blink.playAsSoundEffect(1, 0.50f, false);
+            blink.playAsSoundEffect(1, 0.25f, false);
         }
     }
 

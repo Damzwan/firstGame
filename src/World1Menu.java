@@ -52,10 +52,19 @@ public class World1Menu extends BasicGameState {
             sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
         if (gc.getInput().isKeyPressed(Input.KEY_1)) {
             sbg.enterState(5, new FadeOutTransition(), new FadeInTransition());
+            MainMenu.backgroundMusic.stop();
             //Tutorial.music.loop(1f, 0.1f);
         }
         if (gc.getInput().isKeyPressed(Input.KEY_2)) {
             sbg.enterState(6, new FadeOutTransition(), new FadeInTransition());
+            MainMenu.backgroundMusic.stop();
+            //Tutorial.music.loop(1f, 0.1f);
+        }
+
+        if (gc.getInput().isKeyPressed(Input.KEY_3)) {
+            sbg.enterState(7, new FadeOutTransition(), new FadeInTransition());
+            MainMenu.backgroundMusic.stop();
+            //Tutorial.music.loop(1f, 0.1f);
         }
 
     }

@@ -15,7 +15,7 @@ public class Tutorial extends BasicGameState {
     private World world;
     private Image map;
     private TrueTypeFont font;
-    //public static Music music;
+    public static Sound music;
 
     @Override
     public int getID() {
@@ -25,7 +25,7 @@ public class Tutorial extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         map = new Image("images/tutorial.png");
-        //music = new Music("music/World1.ogg");
+        //music = new Sound("music/World1.ogg");
         font = new TrueTypeFont(new java.awt.Font(java.awt.Font.SERIF, java.awt.Font.BOLD, 40), false);
         List<List<Zombie>> obstacles = new ArrayList<>();
 
@@ -67,7 +67,7 @@ public class Tutorial extends BasicGameState {
         //third obstacle initialisation
         int y_pos3 = 950;
         for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(650, y_pos3), 2));
+            addZombie(obstacles.get(2), new Zombie(world, new Point(550, y_pos3), 2));
             y_pos3 += 60;
         }
         y_pos3 = 950;
@@ -80,7 +80,7 @@ public class Tutorial extends BasicGameState {
         int x_pos = 980;
         int y_pos = 750;
         float speed = 3;
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             addZombie(obstacles.get(3), new Zombie(world, new Point(x_pos, y_pos), speed));
             x_pos += 60;
             y_pos += 25;
@@ -94,11 +94,11 @@ public class Tutorial extends BasicGameState {
         map.draw();
         g.setFont(font);
 
-        //draw the walls
-        g.setColor(Color.red);
-        for (Shape wall : world.getWalls()) {
-            g.draw(wall);
-        }
+//        //draw the walls
+//        g.setColor(Color.red);
+//        for (Shape wall : world.getWalls()) {
+//            g.draw(wall);
+//        }
 
         //render the player
         g.setColor(Color.red);
@@ -174,19 +174,19 @@ public class Tutorial extends BasicGameState {
         //third obstacle
         for (int i = 0; i < 2; i++) {
             Zombie currZombie = world.getObstacles().get(2).get(i);
-            currZombie.moveHorizontal(new Point(100, currZombie.getOriginalY()), currZombie.getOriginalPosition());
+            currZombie.updateLinearMove(currZombie.getOriginalPosition(), new Point(100, currZombie.getOriginalY()) , 500, 0, Direction.horizontal, StartDirection.right);
         }
 
         for (int i = 2; i < 4; i++) {
             Zombie currZombie = world.getObstacles().get(2).get(i);
-            currZombie.moveHorizontal(new Point(300, currZombie.getOriginalY()), currZombie.getOriginalPosition());
+            currZombie.updateLinearMove(currZombie.getOriginalPosition(), new Point(400, currZombie.getOriginalY()) , 500, 0, Direction.horizontal, StartDirection.right);
         }
 
         //fourth obstacle
         float offset = 0;
         for (Zombie currZombie : world.getObstacles().get(3)) {
             currZombie.updateLinearMove(new Point(currZombie.getX(), 750),
-                    new Point(currZombie.getX(), Application.HEIGHT - 65), 100, offset += 90f / world.getObstacles().get(3).size(), Direction.vertical, StartDirection.up);
+                    new Point(currZombie.getX(), Application.HEIGHT - 65), 150, offset += 90f / world.getObstacles().get(3).size(), Direction.vertical, StartDirection.up);
         }
     }
 

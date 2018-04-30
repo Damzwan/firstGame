@@ -10,11 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Level1 extends BasicGameState {
-
     private World world;
     private Image map;
     private TrueTypeFont font;
-
     @Override
     public int getID() {
         return 5;
@@ -27,145 +25,69 @@ public class Level1 extends BasicGameState {
         List<List<Zombie>> obstacles = new ArrayList<>();
         List<Shape> walls = new ArrayList<>();
 
+        walls.add(new Rectangle(500, 0, 180, Application.HEIGHT - 200));
+        walls.add(new Rectangle(880, Application.HEIGHT - 400, Application.WIDTH - 880 - 64, 200));
+        walls.add(new Rectangle(680, 0, Application.WIDTH - 680, 600));
+
         //Create the amount of obstacles
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             obstacles.add(new ArrayList<>());
         }
-        walls.add(new Rectangle(0, 130, Application.WIDTH - 150, 180));
-        walls.add(new Rectangle(150, 720, Application.WIDTH, 180));
 
         try {
-            world = new World(walls, new Player(new Point(10, 10), 2, 8, 2, world), obstacles, new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64));
+            world = new World(walls, new Player(new Point(10, 10), 1, 4, 2, world), obstacles, new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //first obstacle initialization
-        addZombie(obstacles.get(0), new Zombie(world, new Point(Application.WIDTH - 150, 0), 5));
-        addZombie(obstacles.get(0), new Zombie(world, new Point(100, 60), 5));
-
-        //second obstacle initialization
-        int xPos1 = 150;
-        int yPos1 = 300;
-
-        //first wall
-        for (int i = 0; i < 3; i++) {
-            addZombie(obstacles.get(1), new Zombie(world, new Point(xPos1, yPos1), 5));
-            yPos1 += 60;
-        }
-        yPos1 += 120;
+        //first obstacle initialisation
+        int yPos1 = 205;
         for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(1), new Zombie(world, new Point(xPos1, yPos1), 5));
-            yPos1 += 60;
+            addZombie(obstacles.get(0), new Zombie(world, new Point(0, yPos1), 5));
+            yPos1 += 410;
         }
 
-        //second wall
-        yPos1 = 300;
-        for (int i = 0; i < 1; i++) {
-            addZombie(obstacles.get(1), new Zombie(world, new Point(xPos1, yPos1), 5));
-            yPos1 += 60;
-        }
-        yPos1 += 120;
-        for (int i = 0; i < 4; i++) {
-            addZombie(obstacles.get(1), new Zombie(world, new Point(xPos1, yPos1), 5));
-            yPos1 += 60;
+        //second obstacle initialisation
+        int yPos2 = 410;
+        for (int i = 0; i < 2; i++) {
+            addZombie(obstacles.get(1), new Zombie(world, new Point(440, yPos2), 5));
+            yPos2 += 410;
         }
 
-        //third wall
-        yPos1 = 420;
-        for (int i = 0; i < 5; i++) {
-            addZombie(obstacles.get(1), new Zombie(world, new Point(xPos1, yPos1), 5));
-            yPos1 += 60;
-        }
-
-        //fourth wall
-        yPos1 = 300;
-        for (int i = 0; i < 5; i++) {
-            addZombie(obstacles.get(1), new Zombie(world, new Point(xPos1, yPos1), 5));
-            yPos1 += 60;
-        }
-
-        //third obstacle initialization
-
+        //third obstacle initialisation
         //zombie blockade
-        int yPos2 = 900;
-        int xPos2 = 0;
+        int yPos3 = Application.HEIGHT - 200;
+        int xPos3 = Application.WIDTH - 1040;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                addZombie(obstacles.get(2), new Zombie(world, new Point(xPos2, yPos2), 5));
-                yPos2 += 60;
+                addZombie(obstacles.get(2), new Zombie(world, new Point(xPos3, yPos3), 3));
+                yPos3 += 60;
             }
-            yPos2 = 900;
-            xPos2 += 60;
+            yPos3 = Application.HEIGHT - 200;
+            //xPos3 += 60;
         }
 
-        //standing zombies
-
-        //first
-        yPos2 = 900;
+        //fourth obstacle initialisation
+        int xPos4 = 680;
+        for (int i = 0; i < 1; i++) {
+            addZombie(obstacles.get(3), new Zombie(world, new Point(xPos4, 610), 4));
+            xPos4+= 60;
+        }
+        xPos4 += 180;
         for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(300, yPos2), 5));
-            yPos2 += 60;
+            addZombie(obstacles.get(3), new Zombie(world, new Point(xPos4, 610), 4));
+            xPos4+= 60;
         }
-
-        yPos2 = 960;
+        xPos4 += 180;
         for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(500, yPos2), 5));
-            yPos2 += 60;
+            addZombie(obstacles.get(3), new Zombie(world, new Point(xPos4, 610), 4));
+            xPos4+= 60;
         }
-
-        //second
-        addZombie(obstacles.get(2), new Zombie(world, new Point(700, 900), 5));
-        addZombie(obstacles.get(2), new Zombie(world, new Point(700, 1020), 5));
-
-        addZombie(obstacles.get(2), new Zombie(world, new Point(760, 900), 5));
-        addZombie(obstacles.get(2), new Zombie(world, new Point(760, 1020), 5));
-
-        addZombie(obstacles.get(2), new Zombie(world, new Point(820, 900), 5));
-        addZombie(obstacles.get(2), new Zombie(world, new Point(820, 1020), 5));
-
-        //third
-        yPos2 = 960;
+        xPos4 += 180;
         for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(1020, yPos2), 5));
-            yPos2 += 60;
+            addZombie(obstacles.get(3), new Zombie(world, new Point(xPos4, 610), 4));
+            xPos4+= 60;
         }
-
-        //fourth
-        yPos2 = 960;
-        for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(1080, yPos2), 5));
-            yPos2 += 60;
-        }
-
-        //fifth
-        yPos2 = 900;
-        for (int i = 0; i < 3; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(1280, yPos2), 5));
-            yPos2 += 60;
-        }
-
-        //sixth
-        yPos2 = 900;
-        for (int i = 0; i < 3; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(1480, yPos2), 5));
-            yPos2 += 60;
-        }
-
-        //seventh
-        yPos2 = 900;
-        for (int i = 0; i < 2; i++) {
-            addZombie(obstacles.get(2), new Zombie(world, new Point(1680, yPos2), 5));
-            yPos2 += 60;
-        }
-
-        //eight
-        addZombie(obstacles.get(2), new Zombie(world, new Point(1740, 900), 5));
-        addZombie(obstacles.get(2), new Zombie(world, new Point(1740, 1020), 5));
-
-        //ninth
-        addZombie(obstacles.get(2), new Zombie(world, new Point(1800, 900), 5));
-        addZombie(obstacles.get(2), new Zombie(world, new Point(1800, 1020), 5));
 
 
     }
@@ -180,53 +102,34 @@ public class Level1 extends BasicGameState {
         world.basicInputSetup(gc, sbg, getID());
 
         //first obstacle
-        world.getObstacles().get(0).get(0).updateLinearMove( world.getObstacles().get(0).get(0).getOriginalPosition(),new Point(100, 10), 250, 0, Direction.horizontal, StartDirection.right);
-        world.getObstacles().get(0).get(1).updateLinearMove( world.getObstacles().get(0).get(1).getOriginalPosition(), new Point(Application.WIDTH-150, 70), 250, 0, Direction.horizontal, StartDirection.left);
-
+        for (Zombie zombie: world.getObstacles().get(0)){
+            zombie.updateLinearMove(zombie.getOriginalPosition(), new Point(440, zombie.getOriginalY()), 300, 0, Direction.horizontal, StartDirection.left);
+        }
         //second obstacle
-        int offset = 0;
-        List<Zombie> get = world.getObstacles().get(1);
-        for (int i = 0; i < 5; i++) {
-            Zombie zombie = get.get(i);
-            zombie.updateLinearMove(new Point(150, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 500, offset, Direction.horizontal, StartDirection.left);
+        for (Zombie zombie: world.getObstacles().get(1)){
+            zombie.updateLinearMove(zombie.getOriginalPosition(), new Point(0, zombie.getOriginalY()), 300, 0, Direction.horizontal, StartDirection.right);
         }
-
-        for (int i = 5; i < 10; i++) {
-            Zombie zombie = get.get(i);
-            zombie.updateLinearMove(new Point(150, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 500, -90f, Direction.horizontal, StartDirection.left);
-        }
-
-        for (int i = 10; i < 15; i++) {
-            Zombie zombie = get.get(i);
-            zombie.updateLinearMove(new Point(150, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 500, -180f, Direction.horizontal, StartDirection.left);
-        }
-
-        for (int i = 15; i < 20; i++) {
-            Zombie zombie = get.get(i);
-            zombie.updateLinearMove(new Point(150, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 500, -270f, Direction.horizontal, StartDirection.left);
-        }
-
         //third obstacle
-        get = world.getObstacles().get(2);
+        List<Zombie> get = world.getObstacles().get(2);
         for (int i = 0; i < 3; i++) {
             Zombie zombie = get.get(i);
-            zombie.updateLinearMove(new Point(0, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 800, 0, Direction.horizontal, StartDirection.left);
+            zombie.updateLinearMove(new Point(Application.WIDTH - 1040, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 200, 0, Direction.horizontal, StartDirection.left);
         }
 
         for (int i = 3; i < 6; i++) {
             Zombie zombie = get.get(i);
-            zombie.updateLinearMove(new Point(0, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 800, -20, Direction.horizontal, StartDirection.left);
+            zombie.updateLinearMove(new Point(Application.WIDTH - 1040, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 200, -15, Direction.horizontal, StartDirection.left);
         }
 
         for (int i = 6; i < 9; i++) {
             Zombie zombie = get.get(i);
-            zombie.updateLinearMove(new Point(0, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 800, -40, Direction.horizontal, StartDirection.left);
+            zombie.updateLinearMove(new Point(Application.WIDTH - 1040, zombie.getOriginalY()), new Point(Application.WIDTH - 150, zombie.getOriginalY()), 200, -30, Direction.horizontal, StartDirection.left);
         }
-
-        //chilling zombies
-        for (int i = 9; i < 35; i++) {
+        get = world.getObstacles().get(3);
+        //fourth obstacle
+        for (int i = 0; i < 7; i++) {
             Zombie zombie = get.get(i);
-            zombie.stand(Zombie.zombieMoveLeft);
+            zombie.updateLinearMove(zombie.getOriginalPosition(), new Point(zombie.getOriginalX() + 280 - 64, zombie.getOriginalY()), 300, 0, Direction.horizontal, StartDirection.left);
         }
 
     }

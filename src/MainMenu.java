@@ -67,7 +67,6 @@ public class MainMenu extends BasicGameState {
             sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
             //backgroundMusic.pause();
             backgroundMusic.stop();
-            //new Music("music/World1.ogg").loop(1f, 0.1f);
             //Tutorial.music.loop(1f, 0.1f);
         }
         if (gc.getInput().isKeyPressed(Input.KEY_P)) {
