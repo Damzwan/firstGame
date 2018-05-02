@@ -35,7 +35,8 @@ public class Level1 extends BasicGameState {
         }
 
         try {
-            world = new World(walls, new Player(new Point(10, 10), 1, 4, 2, world), obstacles, new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64));
+            world = new World(walls, new Player(new Point(10, 10), 1, 4, 2, world), obstacles, new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64),
+                    null, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

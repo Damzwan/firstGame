@@ -7,6 +7,7 @@ import org.newdawn.slick.openal.SoundStore;
 import java.io.IOException;
 
 public class Player extends Living {
+    private Point originalPosition;
     private World world;
     private int health, teleports, originalHealth, originalTeleport;
     private static Image player, dot;
@@ -31,6 +32,7 @@ public class Player extends Living {
         this.world = world;
         originalHealth = health;
         originalTeleport = teleports;
+        setOriginalPosition(location);
         setOriginalSpeed(speed);
         setHealth(health);
         setTeleports(teleports);
@@ -246,5 +248,13 @@ public class Player extends Living {
 
     public void setOriginalSpeed(float originalSpeed) {
         this.originalSpeed = originalSpeed;
+    }
+
+    public Point getOriginalPosition() {
+        return originalPosition;
+    }
+
+    public void setOriginalPosition(Point originalPosition) {
+        this.originalPosition = originalPosition;
     }
 }

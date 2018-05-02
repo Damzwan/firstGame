@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class World {
-    private List<Shape> walls;
+    private List<Shape> walls, fastGoo, slowGoo, stopGoo;
     private Player player;
     private static Audio damage;
     private List<List<Zombie>> obstacles;
@@ -27,7 +27,7 @@ public class World {
         }
     }
 
-    public World(List<Shape> walls, Player player, List<List<Zombie>> obstacles, Shape end) {
+    public World(List<Shape> walls, Player player, List<List<Zombie>> obstacles, Shape end, List<Shape> fastGoo, List<Shape> slowGoo, List<Shape> stopGoo) {
         this.walls = walls;
         this.player = player;
         player.setWorld(this);
@@ -37,6 +37,9 @@ public class World {
         walls.add(new Rectangle(0, -200, Application.WIDTH, 200));
         walls.add(new Rectangle(0, Application.HEIGHT, Application.WIDTH, 200));
         walls.add(new Rectangle(-200, 0, 200, Application.HEIGHT));
+        this.fastGoo = fastGoo;
+        this.slowGoo = slowGoo;
+        this.stopGoo = stopGoo;
     }
 
     public boolean collidesWithWall() {
@@ -80,7 +83,7 @@ public class World {
         sbg.enterState(id, new FadeOutTransition(), new FadeInTransition());
         getPlayer().setHealth(getPlayer().getOriginalHealth());
         getPlayer().setTeleports(getPlayer().getOriginalTeleport());
-        getPlayer().setLocation(new Point(10, 10));
+        getPlayer().setLocation(getPlayer().getOriginalPosition());
         getPlayer().setRunEnergy(100);
     }
 
@@ -106,6 +109,29 @@ public class World {
         //draw map and set font
         map.draw();
         g.setFont(font);
+
+        //draw the goo
+        if (fastGoo != null) {
+            g.setColor(Color.green);
+            for (Shape goo : fastGoo) {
+                g.draw(goo);
+            }
+        }
+
+
+        if (slowGoo != null) {
+            g.setColor(Color.yellow);
+            for (Shape goo : slowGoo) {
+                g.draw(goo);
+            }
+        }
+
+        if (stopGoo != null){
+            g.setColor(Color.black);
+            for (Shape goo: stopGoo){
+                g.draw(goo);
+            }
+        }
 
         //Draw end destination
         g.setColor(Color.blue);
@@ -142,6 +168,26 @@ public class World {
         }
     }
 
+    public void gooSetup(){
+
+        if (slowGoo != null){
+            for (Shape goo: slowGoo){
+                if (goo.contains(player.getLocation().getX() + 96/2, player.getLocation().getY() + 75/2)) player.setSpeed(player.getSpeed() / 2);
+            }
+        }
+        if (fastGoo != null){
+            for (Shape goo: fastGoo) {
+                if (goo.contains(player.getLocation().getX() + 96/2, player.getLocation().getY() + 75/2))
+                    player.setSpeed(player.getSpeed() * 2);
+            }
+        }
+        if (stopGoo != null){
+            for (Shape goo: stopGoo){
+                if (goo.contains(player.getLocation().getX() + 96/2, player.getLocation().getY() + 75/2)) player.setSpeed(0.10f);
+            }
+        }
+    }
+
     public void basicInputSetup(GameContainer gc, StateBasedGame sbg, int id) throws SlickException {
         if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) endGame(sbg, id);
         if (gc.getInput().isKeyPressed(Input.KEY_R)) reset(sbg, id);
@@ -151,7 +197,10 @@ public class World {
         if (getPlayer().getHitBox().intersects(getEnd())) endGame(sbg, id);
         getPlayer().setup(gc);
         getDamage();
+        gooSetup();
+        System.out.println(player.getSpeed());
     }
+
 
     public long getTick() {
         return tick;

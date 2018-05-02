@@ -67,6 +67,12 @@ public class World1Menu extends BasicGameState {
             //Tutorial.music.loop(1f, 0.1f);
         }
 
+        if (gc.getInput().isKeyPressed(Input.KEY_4)) {
+            sbg.enterState(8, new FadeOutTransition(), new FadeInTransition());
+            MainMenu.backgroundMusic.stop();
+            //Tutorial.music.loop(1f, 0.1f);
+        }
+
     }
 
     public void addLevel(String... strings) {

@@ -37,8 +37,7 @@ public class Tutorial extends BasicGameState {
             world = new World(
                     walls,
                     new Player(new Point(10, 10), 2, 8, 2, world), obstacles,
-                    new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64)
-            );
+                    new Rectangle(Application.WIDTH - 64, Application.HEIGHT - 64, 64, 64), null, null, null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

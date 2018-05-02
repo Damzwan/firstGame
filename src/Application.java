@@ -26,6 +26,7 @@ public class Application extends StateBasedGame {
         this.addState(new Level3());
         this.addState(new Level2());
         this.addState(new Level1());
+        this.addState(new Level4());
     }
 
     public static void main(String[] args) {
